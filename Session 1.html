@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 1: Introduction to Tkinter - Python GUI Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .lesson-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .lesson-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .lesson-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .lesson-subtitle {
+      font-size: 1.2rem;
+      color: #6c757d;
+      font-weight: 400;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      padding: 2rem;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-learn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-concepts { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .card-goal { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-content {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .card-content ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card-content li {
+      margin-bottom: 0.7rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .card-content li::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border-left: 5px solid #667eea;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      color: #5a6c7d;
+      margin-bottom: 1.5rem;
+    }
+
+    .code-container {
+      background: #1e1e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-header {
+      background: #2d2d3f;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3c3c54;
+    }
+
+    .code-title {
+      color: #a6adc8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .code-editor {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .code-editor code {
+      color: #cdd6f4;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .run-btn {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    .run-btn:hover {
+      box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+    }
+
+    .live-editor {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 2px solid #e1e8ed;
+      background: #f8fafc;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .live-editor:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 4px solid #667eea;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-content {
+      color: #424242;
+      line-height: 1.7;
+    }
+
+    .tip-content ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .tip-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+      border-left: 4px solid #ff7043;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .challenge-title {
+      font-weight: 600;
+      color: #d84315;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .progress-step.completed {
+      background: #28a745;
+    }
+
+    .progress-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 60px;
+      height: 2px;
+      background: #dee2e6;
+      transform: translateY(-50%);
+    }
+
+    .progress-step:last-child::after {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .lesson-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .lesson-title {
+        font-size: 2rem;
+      }
+      
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 1.5rem;
+      }
+      
+      .code-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <!-- Header Section -->
+    <div class="lesson-header">
+      <h1 class="lesson-title">Session 1: Tkinter Fundamentals</h1>
+      <p class="lesson-subtitle">Build Your First Interactive Desktop Application with Python</p>
+      <p style="font-size: 1rem; opacity: 0.8; margin-top: 0.5rem;">Created by Teacher Theo</p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-step completed">1</div>
+      <div class="progress-step">2</div>
+      <div class="progress-step">3</div>
+      <div class="progress-step">4</div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+      <div class="info-card card-learn">
+        <div class="card-title">🎯 Learning Objectives</div>
+        <div class="card-content">
+          <ul>
+            <li>Master the fundamentals of GUI programming</li>
+            <li>Create responsive desktop applications</li>
+            <li>Handle user interactions and events</li>
+            <li>Implement input validation and error handling</li>
+            <li>Apply professional styling and layout techniques</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-concepts">
+        <div class="card-title">🔧 Core Concepts</div>
+        <div class="card-content">
+          <ul>
+            <li><strong>GUI Architecture:</strong> Windows, widgets, and event loops</li>
+            <li><strong>Tkinter Library:</strong> Python's built-in GUI framework</li>
+            <li><strong>Event-Driven Programming:</strong> Responding to user actions</li>
+            <li><strong>Layout Management:</strong> Organizing interface elements</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-goal">
+        <div class="card-title">🚀 Project Outcome</div>
+        <div class="card-content">
+          Build a complete "Personal Greeter" application featuring:
+          <ul>
+            <li>Interactive user input forms</li>
+            <li>Real-time validation feedback</li>
+            <li>Professional styling and colors</li>
+            <li>Multi-button functionality</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic Window -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+        Creating Your First GUI Window
+      </h2>
+      <p class="section-description">
+        Every desktop application starts with a main window. Let's create one that demonstrates the core concepts of GUI programming.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">basic_window.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor1', 'code1')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor1')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code1">
+<pre><code>import tkinter as tk
+
+# Create the main application window
+root = tk.Tk()
+root.title("My First Python GUI Window")
+root.geometry("400x300")  # Width x Height in pixels
+root.configure(bg="#f0f0f0")  # Light gray background
+
+# Add a welcome message
+welcome_label = tk.Label(
+    root,
+    text="Welcome to GUI Programming!",
+    font=("Arial", 16, "bold"),
+    bg="#f0f0f0",
+    fg="#2c3e50"
+)
+welcome_label.pack(pady=50)
+
+# Start the GUI event loop (keeps window open)
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor1" class="live-editor" placeholder="Experiment with the code here - try changing colors, text, or window size..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">💡 Understanding the Code</div>
+        <div class="tip-content">
+          <ul>
+            <li><code>tk.Tk()</code> creates the main application window object</li>
+            <li><code>.title()</code> sets the text that appears in the window's title bar</li>
+            <li><code>.geometry()</code> defines window size as "width x height"</li>
+            <li><code>.configure(bg=)</code> sets the background color</li>
+            <li><code>.mainloop()</code> starts the event loop that keeps your window responsive</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Interactive Elements -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+        Adding Interactive Elements
+      </h2>
+      <p class="section-description">
+        Now let's make our application interactive by adding buttons and labels that respond to user actions.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">interactive_app.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor2', 'code2')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor2')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code2">
+<pre><code>import tkinter as tk
+
+def button_clicked():
+    """Function that runs when the button is clicked"""
+    status_label.config(
+        text="🎉 Button clicked! You're learning GUI programming!",
+        fg="#27ae60"
+    )
+    click_count[0] += 1
+    counter_label.config(text=f"Clicks: {click_count[0]}")
+
+def reset_app():
+    """Reset the application to initial state"""
+    status_label.config(
+        text="Click the button above to see magic happen!",
+        fg="#34495e"
+    )
+    click_count[0] = 0
+    counter_label.config(text="Clicks: 0")
+
+# Initialize click counter
+click_count = [0]
+
+# Create main window
+root = tk.Tk()
+root.title("Interactive GUI Demo")
+root.geometry("500x350")
+root.configure(bg="#ecf0f1")
+
+# Title
+title_label = tk.Label(
+    root,
+    text="Interactive Elements Demo",
+    font=("Arial", 18, "bold"),
+    bg="#ecf0f1",
+    fg="#2c3e50"
+)
+title_label.pack(pady=20)
+
+# Main action button
+action_button = tk.Button(
+    root,
+    text="Click Me!",
+    command=button_clicked,
+    font=("Arial", 14, "bold"),
+    bg="#3498db",
+    fg="white",
+    padx=30,
+    pady=10,
+    relief="raised",
+    cursor="hand2"
+)
+action_button.pack(pady=15)
+
+# Status label (shows feedback)
+status_label = tk.Label(
+    root,
+    text="Click the button above to see magic happen!",
+    font=("Arial", 12),
+    bg="#ecf0f1",
+    fg="#34495e",
+    wraplength=400
+)
+status_label.pack(pady=15)
+
+# Click counter
+counter_label = tk.Label(
+    root,
+    text="Clicks: 0",
+    font=("Arial", 11),
+    bg="#ecf0f1",
+    fg="#7f8c8d"
+)
+counter_label.pack(pady=5)
+
+# Reset button
+reset_button = tk.Button(
+    root,
+    text="Reset",
+    command=reset_app,
+    font=("Arial", 10),
+    bg="#e74c3c",
+    fg="white",
+    padx=20,
+    pady=5,
+    cursor="hand2"
+)
+reset_button.pack(pady=20)
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor2" class="live-editor" placeholder="Try modifying the button colors, text, or add new functionality..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🎯 Key Programming Concepts</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Event Handling:</strong> Functions that respond to user interactions</li>
+            <li><strong>Widget Properties:</strong> Customizing appearance with colors, fonts, and spacing</li>
+            <li><strong>State Management:</strong> Keeping track of data like click counts</li>
+            <li><strong>User Feedback:</strong> Providing immediate visual responses to actions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Complete Application -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+        Building a Complete Application
+      </h2>
+      <p class="section-description">
+        Let's create a professional-looking application that combines user input, validation, and multiple interactive features.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">personal_greeter.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor3', 'code3')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor3')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code3">
+<pre><code>import tkinter as tk
+from tkinter import messagebox
+import random
+
+def greet_user():
+    """Create a personalized greeting with validation"""
+    name = name_entry.get().strip()
+    
+    if not name:
+        feedback_label.config(
+            text="⚠️ Please enter your name first!",
+            fg="#e74c3c"
+        )
+        name_entry.focus()
+        return
+    
+    if len(name) < 2:
+        feedback_label.config(
+            text="⚠️ Name must be at least 2 characters long!",
+            fg="#e74c3c"
+        )
+        return
+    
+    # Random greeting messages
+    greetings = [
+        f"Hello, {name}! Welcome to Python GUI programming! 🎉",
+        f"Great to meet you, {name}! You're doing amazing! ⭐",
+        f"Hi there, {name}! Ready to build awesome apps? 🚀",
+        f"Welcome aboard, {name}! Let's code something cool! 💻"
+    ]
+    
+    greeting = random.choice(greetings)
+    feedback_label.config(text=greeting, fg="#27ae60")
+    
+    # Update statistics
+    global greeting_count
+    greeting_count += 1
+    stats_label.config(text=f"Greetings given: {greeting_count}")
+
+def clear_form():
+    """Clear all input and reset the form"""
+    name_entry.delete(0, tk.END)
+    feedback_label.config(
+        text="Enter your name above and click 'Greet Me!' 👆",
+        fg="#34495e"
+    )
+    name_entry.focus()
+
+def show_about():
+    """Show information about the application"""
+    messagebox.showinfo(
+        "About Personal Greeter",
+        "Personal Greeter v1.0\n\n"
+        "A simple GUI application built with Python Tkinter.\n"
+        "This demonstrates user input, validation, and interactive features.\n\n"
+        "Created for learning GUI programming!"
+    )
+
+# Initialize statistics
+greeting_count = 0
+
+# Create main window
+root = tk.Tk()
+root.title("Personal Greeter - Python GUI App")
+root.geometry("600x500")
+root.configure(bg="#2c3e50")
+
+# Main container frame
+main_frame = tk.Frame(root, bg="#ecf0f1", padx=40, pady=30)
+main_frame.pack(expand=True, fill="both", padx=20, pady=20)
+
+# App title
+title_label = tk.Label(
+    main_frame,
+    text="🌟 Personal Greeter App",
+    font=("Arial", 24, "bold"),
+    bg="#ecf0f1",
+    fg="#2c3e50"
+)
+title_label.pack(pady=(0, 30))
+
+# Input section
+input_frame = tk.Frame(main_frame, bg="#ecf0f1")
+input_frame.pack(pady=20)
+
+tk.Label(
+    input_frame,
+    text="What's your name?",
+    font=("Arial", 14),
+    bg="#ecf0f1",
+    fg="#34495e"
+).pack(pady=(0, 10))
+
+name_entry = tk.Entry(
+    input_frame,
+    font=("Arial", 14),
+    width=25,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+name_entry.pack(pady=(0, 20))
+name_entry.bind('<Return>', lambda e: greet_user())  # Enter key support
+
+# Buttons section
+button_frame = tk.Frame(main_frame, bg="#ecf0f1")
+button_frame.pack(pady=20)
+
+greet_button = tk.Button(
+    button_frame,
+    text="Greet Me! 👋",
+    command=greet_user,
+    font=("Arial", 12, "bold"),
+    bg="#3498db",
+    fg="white",
+    padx=25,
+    pady=10,
+    relief="raised",
+    cursor="hand2"
+)
+greet_button.pack(side=tk.LEFT, padx=10)
+
+clear_button = tk.Button(
+    button_frame,
+    text="Clear 🔄",
+    command=clear_form,
+    font=("Arial", 12, "bold"),
+    bg="#f39c12",
+    fg="white",
+    padx=25,
+    pady=10,
+    relief="raised",
+    cursor="hand2"
+)
+clear_button.pack(side=tk.LEFT, padx=10)
+
+about_button = tk.Button(
+    button_frame,
+    text="About ℹ️",
+    command=show_about,
+    font=("Arial", 12, "bold"),
+    bg="#9b59b6",
+    fg="white",
+    padx=25,
+    pady=10,
+    relief="raised",
+    cursor="hand2"
+)
+about_button.pack(side=tk.LEFT, padx=10)
+
+# Feedback section
+feedback_label = tk.Label(
+    main_frame,
+    text="Enter your name above and click 'Greet Me!' 👆",
+    font=("Arial", 13),
+    bg="#ecf0f1",
+    fg="#34495e",
+    wraplength=500,
+    justify="center"
+)
+feedback_label.pack(pady=30)
+
+# Statistics
+stats_label = tk.Label(
+    main_frame,
+    text="Greetings given: 0",
+    font=("Arial", 10),
+    bg="#ecf0f1",
+    fg="#7f8c8d"
+)
+stats_label.pack(pady=(20, 0))
+
+# Set initial focus
+name_entry.focus()
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor3" class="live-editor" placeholder="This is your final project! Try customizing colors, adding features, or changing the greetings..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🚀 Advanced Features Implemented</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Input Validation:</strong> Checks for empty names and minimum length</li>
+            <li><strong>Random Messages:</strong> Variety in user experience with different greetings</li>
+            <li><strong>Keyboard Support:</strong> Press Enter to submit (user-friendly)</li>
+            <li><strong>Professional Layout:</strong> Frames for organized component placement</li>
+            <li><strong>Statistics Tracking:</strong> Count of total greetings given</li>
+            <li><strong>Dialog Boxes:</strong> About dialog for additional information</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="challenge-box">
+        <div class="challenge-title">🎯 Extension Challenges</div>
+        <div class="tip-content">
+          Try enhancing the application with these features:
+          <ul>
+            <li><strong>Age Input:</strong> Add an age field and customize greetings based on age</li>
+            <li><strong>Theme Switcher:</strong> Add buttons to change between light and dark themes</li>
+            <li><strong>Save History:</strong> Keep a list of all names that have been greeted</li>
+            <li><strong>Time-based Greetings:</strong> Show "Good Morning/Afternoon/Evening" based on current time</li>
+            <li><strong>Custom Colors:</strong> Let users pick their favorite colors for the interface</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+      <h2 style="color: white; margin-bottom: 1rem;">🎊 Congratulations!</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+        You've successfully completed Session 1 and built your first interactive Python GUI application!
+      </p>
+      <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <h3 style="margin-bottom: 1rem;">✅ What You've Mastered:</h3>
+        <ul style="text-align: left; display: inline-block;">
+          <li>Creating and configuring GUI windows</li>
+          <li>Adding interactive widgets (buttons, labels, entries)</li>
+          <li>Handling user events and input validation</li>
+          <li>Implementing professional styling and layout</li>
+          <li>Building complete, functional applications</li>
+        </ul>
+      </div>
+      <p style="font-size: 1.1rem; margin-top: 1.5rem;">
+        <strong>Next:</strong> Session 2 will cover advanced layouts, menus, and file operations! 🚀
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function copyToEditor(editorId, codeId) {
+      const textarea = document.getElementById(editorId);
+      const codeBlock = document.getElementById(codeId);
+      if (textarea && codeBlock) {
+        const code = codeBlock.innerText.trim();
+        textarea.value = code;
+        textarea.focus();
+        textarea.select();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(code).then(() => {
+          // Visual feedback
+          const btn = event.target;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '✅ Copied!';
+          btn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+          
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          }, 2000);
+        }).catch(() => {
+          // Fallback for older browsers
+          textarea.select();
+          document.execCommand('copy');
+        });
+      }
+    }
+
+    function runOnline(editorId) {
+      const textarea = document.getElementById(editorId);
+      if (textarea && textarea.value.trim()) {
+        const code = textarea.value;
+        const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+        window.open(url, '_blank');
+      } else {
+        // If editor is empty, use the example code
+        const codeId = editorId.replace('editor', 'code');
+        const codeBlock = document.getElementById(codeId);
+        if (codeBlock) {
+          const code = codeBlock.innerText.trim();
+          const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+          window.open(url, '_blank');
+        }
+      }
+    }
+
+    // Auto-focus first editor when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstEditor = document.getElementById('editor1');
+      if (firstEditor) {
+        firstEditor.focus();
+      }
+    });
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

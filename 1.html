@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Game Programming Course</title>
+  <style>
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+      margin: 0;
+      padding: 0;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .header-bar {
+      background: linear-gradient(90deg, #3a8dde 0%, #6dd5ed 100%);
+      color: #fff;
+      padding: 2rem 0 1.2rem 0;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(58,141,222,0.08);
+      margin-bottom: 2rem;
+    }
+    .header-bar h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .header-bar p {
+      margin: 0.5rem 0 0 0;
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2rem 1.5rem;
+    }
+
+    .module {
+      background: #fff;
+      margin-bottom: 2rem;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(58,141,222,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+      border-left: 7px solid #3a8dde;
+    }
+    .module:hover {
+      box-shadow: 0 12px 32px rgba(58,141,222,0.18), 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 7px solid #27ae60;
+    }
+
+    .module-header {
+      background: linear-gradient(90deg, #3a8dde 0%, #6dd5ed 100%);
+      color: #fff;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #e0eafc;
+      transition: background 0.2s;
+    }
+    .module-header:hover {
+      background: linear-gradient(90deg, #27ae60 0%, #3a8dde 100%);
+    }
+
+    .module-content {
+      display: none;
+      padding: 1.5rem 1.5rem 1rem 1.5rem;
+      background: #fafdff;
+      animation: fadeIn 0.4s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .session {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.2rem;
+      background: #f4faff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(58,141,222,0.06);
+      transition: background 0.2s;
+    }
+    .session-title {
+      font-weight: 700;
+      color: #3a8dde;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    .session p {
+      margin: 0.2rem 0 0.7rem 0;
+      color: #444;
+      font-size: 1rem;
+    }
+    .open-lesson-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1.3rem;
+      background: linear-gradient(90deg, #27ae60 0%, #3a8dde 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(39,174,96,0.08);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .open-lesson-btn:hover {
+      background: linear-gradient(90deg, #3a8dde 0%, #27ae60 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+
+    ul {
+      margin: 0.5rem 0 0 1.2rem;
+      padding: 0;
+      color: #333;
+      font-size: 1.05rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 0.2rem 2rem 0.2rem;
+      }
+      .module-header, .module-content {
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+      }
+      .session {
+        padding: 0.7rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>Python for Game Programming <span style="font-size:1.1rem;font-weight:400;opacity:0.8;">(Ages 10+)</span></h1>
+    <p>Fun, hands-on coding for young creators: build real games, learn Python, and unleash your imagination!</p>
+  </div>
+  <div class="container">
+  <div class="module">
+    <div class="module-header">Module 1: GUI Programming with Tkinter (Sessions 1–4)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 1: Introduction to Tkinter</div>
+        <p><strong>What you'll learn:</strong> GUI basics, creating windows, adding labels and buttons</p>
+        <p><strong>Key concepts:</strong> tkinter.Tk(), .title(), .mainloop(), Label, Button, pack()</p>
+        <p><strong>Project:</strong> "Hello World" GUI with interactive button</p>
+        <a href="Session 1.html" target="_blank" rel="noopener">
+          <button class="open-lesson-btn">Open Lesson</button>
+        </a>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 2: Building Simple Apps</div>
+        <p><strong>What you'll learn:</strong> User input, functions, displaying results</p>
+        <p><strong>Key concepts:</strong> Entry widget, .get() method, event handling, StringVar()</p>
+        <p><strong>Project:</strong> Simple calculator that adds two numbers</p>
+        <a href="Session 2.html" target="_blank" rel="noopener">
+          <button class="open-lesson-btn">Open Lesson</button>
+        </a>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 3: Drawing with Tkinter</div>
+        <p><strong>What you'll learn:</strong> Canvas widget, drawing shapes, colors</p>
+        <p><strong>Key concepts:</strong> Canvas, create_rectangle(), create_oval(), create_line()</p>
+        <p><strong>Project:</strong> Digital drawing pad with different shapes and colors</p>
+        <a href="Session 3.html" target="_blank" rel="noopener">
+          <button class="open-lesson-btn">Open Lesson</button>
+        </a>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 4: Mini Project – Click Game</div>
+        <p><strong>What you'll learn:</strong> Game logic, scoring, timers</p>
+        <p><strong>Key concepts:</strong> Random positioning, click events, time tracking</p>
+        <p><strong>Project:</strong> Click the button game with score counter and timer</p>
+        <a href="Session 4.html" target="_blank" rel="noopener">
+          <button class="open-lesson-btn">Open Lesson</button>
+        </a>
+      </div>
+      
+      <div class="session" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-left: 4px solid #f5576c;">
+        <div class="session-title" style="color: #fff; font-size: 1.2rem;">🎯 Module 1 Quiz: Test Your Knowledge!</div>
+        <p style="color: #fff; font-weight: 500;"><strong>What you'll do:</strong> Review everything you've learned in Module 1 with interactive questions</p>
+        <p style="color: #fff; font-weight: 500;"><strong>Topics covered:</strong> Tkinter basics, widgets, event handling, and GUI development</p>
+        <p style="color: #fff; font-weight: 500;"><strong>Format:</strong> Multiple choice, coding challenges, and concept review questions</p>
+        <a href="Module1-Quiz.html" target="_blank" rel="noopener">
+          <button class="open-lesson-btn" style="background: linear-gradient(90deg, #fff 0%, #f8f9fa 100%); color: #f5576c; font-weight: 700; border: 2px solid #fff;">Take Quiz</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Module 2: Getting Started with Pygame (Sessions 5–6)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 5: Introduction to Pygame</div>
+        <p><strong>What you'll learn:</strong> Game development basics, setting up Pygame, game loops</p>
+        <p><strong>Key concepts:</strong> pygame.init(), display.set_mode(), game loop, events</p>
+        <p><strong>Project:</strong> First game window with background color that responds to keyboard</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 6: Drawing and Moving Shapes</div>
+        <p><strong>What you'll learn:</strong> Drawing shapes, keyboard input, movement, boundaries</p>
+        <p><strong>Key concepts:</strong> pygame.draw, KEYDOWN events, coordinate system, collision detection</p>
+        <p><strong>Project:</strong> Moving rectangle that bounces off screen edges</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Module 3: Game Mechanics in Pygame (Sessions 7–9)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 7: Characters and Backgrounds</div>
+        <p><strong>What you'll learn:</strong> Loading images, creating player characters, scrolling backgrounds</p>
+        <p><strong>Key concepts:</strong> pygame.image.load(), blit(), sprite positioning, background scrolling</p>
+        <p><strong>Project:</strong> Character that moves across a scrolling background scene</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 8: Jumping and Gravity</div>
+        <p><strong>What you'll learn:</strong> Physics simulation, gravity effects, platform jumping</p>
+        <p><strong>Key concepts:</strong> Velocity, acceleration, gravity simulation, jump mechanics</p>
+        <p><strong>Project:</strong> Platform jumper where character can jump and fall realistically</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 9: Sprites and Animation</div>
+        <p><strong>What you'll learn:</strong> Sprite classes, animation frames, character states</p>
+        <p><strong>Key concepts:</strong> pygame.sprite.Sprite, animation cycles, sprite groups</p>
+        <p><strong>Project:</strong> Animated character with walking and jumping animations</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- You can continue with the remaining modules here -->
+
+  <div class="module">
+    <div class="module-header">Module 4: Building a Game – “Catch the Star” (Sessions 10–11)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 10: Catching Falling Objects</div>
+        <p><strong>What you'll learn:</strong> Object spawning, collision detection, game scoring</p>
+        <p><strong>Key concepts:</strong> Random object generation, pygame.Rect.colliderect(), score tracking</p>
+        <p><strong>Project:</strong> Catch falling stars game with player movement and scoring</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 11: Enemies, Score & Sound</div>
+        <p><strong>What you'll learn:</strong> Adding obstacles, sound effects, game over conditions</p>
+        <p><strong>Key concepts:</strong> pygame.mixer, sound loading, collision consequences, game states</p>
+        <p><strong>Project:</strong> Complete "Catch the Star" game with enemies, sounds, and high scores</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Module 5: Creating the Snake Game (Sessions 12–13)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 12: Snake Mechanics</div>
+        <p><strong>What you'll learn:</strong> Grid-based movement, snake body segments, direction control</p>
+        <p><strong>Key concepts:</strong> List manipulation, grid coordinates, directional movement, snake growth</p>
+        <p><strong>Project:</strong> Basic snake that moves and grows when eating food</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 13: Growing and Scoring</div>
+        <p><strong>What you'll learn:</strong> Food generation, snake growth, collision detection with self/walls</p>
+        <p><strong>Key concepts:</strong> Self-collision, boundary checking, score incrementing, game over logic</p>
+        <p><strong>Project:</strong> Complete Snake game with scoring and game over screen</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Module 6: Space Shooter Game (Sessions 14–15)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 14: Spaceship Controls</div>
+        <p><strong>What you'll learn:</strong> Player spaceship movement, shooting projectiles, sprite management</p>
+        <p><strong>Key concepts:</strong> Continuous movement, bullet creation, sprite groups, off-screen cleanup</p>
+        <p><strong>Project:</strong> Controllable spaceship that can move and shoot bullets</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 15: Enemies and Effects</div>
+        <p><strong>What you'll learn:</strong> Enemy spawning, bullet-enemy collisions, visual effects</p>
+        <p><strong>Key concepts:</strong> Enemy AI patterns, collision handling, particle effects, score systems</p>
+        <p><strong>Project:</strong> Complete space shooter with enemies, explosions, and scoring</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Module 7: Final Project – Car Racing Game (Sessions 16–18)</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">Session 16: Designing the Racing Game</div>
+        <p><strong>What you'll learn:</strong> Top-down view games, car physics, road generation</p>
+        <p><strong>Key concepts:</strong> Vehicle movement, road boundaries, scrolling environments, car steering</p>
+        <p><strong>Project:</strong> Basic racing game with player car and scrolling road</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 17: Scrolling and Collision</div>
+        <p><strong>What you'll learn:</strong> Infinite scrolling, obstacle avoidance, difficulty progression</p>
+        <p><strong>Key concepts:</strong> Background tiling, obstacle generation, speed increase, lane changing</p>
+        <p><strong>Project:</strong> Racing game with traffic cars to avoid and increasing difficulty</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+      <div class="session">
+        <div class="session-title">Session 18: Final Polish</div>
+        <p><strong>What you'll learn:</strong> Game menus, restart functionality, final testing and debugging</p>
+        <p><strong>Key concepts:</strong> Game states, menu systems, save/load features, code optimization</p>
+        <p><strong>Project:</strong> Complete racing game with menus, high scores, and polished gameplay</p>
+        <button class="open-lesson-btn">Open Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Course Conclusion &amp; Next Steps</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">🎉 What You've Accomplished</div>
+        <p><strong>Skills Mastered:</strong></p>
+        <ul>
+          <li><strong>GUI Development:</strong> Created interactive desktop applications with Tkinter</li>
+          <li><strong>Game Programming:</strong> Built complete 2D games using Pygame</li>
+          <li><strong>Problem Solving:</strong> Debugged code and implemented game logic</li>
+          <li><strong>Project Management:</strong> Completed multiple coding projects from start to finish</li>
+        </ul>
+        <p><strong>Games Built:</strong> Click Game, Catch the Star, Snake Game, Space Shooter, Racing Game</p>
+      </div>
+      <div class="session">
+        <div class="session-title">🚀 Next Steps in Your Coding Journey</div>
+        <p><strong>Immediate Next Steps:</strong></p>
+        <ul>
+          <li><strong>Expand Your Games:</strong> Add new features to your existing projects</li>
+          <li><strong>Learn Advanced Python:</strong> Explore object-oriented programming concepts</li>
+          <li><strong>Try New Libraries:</strong> Experiment with Matplotlib for data visualization</li>
+          <li><strong>Join Communities:</strong> Share your games on platforms like itch.io or GitHub</li>
+        </ul>
+        <p><strong>Advanced Pathways:</strong> Unity with C#, Web development with Django, Data Science with Pandas</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">Learning Outcomes</div>
+    <div class="module-content">
+      <div class="session">
+        <div class="session-title">📚 Technical Skills Gained</div>
+        <ul>
+          <li><strong>Python Programming:</strong> Variables, functions, loops, conditionals, data structures</li>
+          <li><strong>Tkinter GUI Development:</strong> Windows, widgets, event handling, layout management</li>
+          <li><strong>Pygame Game Development:</strong> Game loops, sprites, collision detection, sound integration</li>
+          <li><strong>Problem-Solving:</strong> Debugging techniques, logical thinking, algorithm design</li>
+        </ul>
+      </div>
+      <div class="session">
+        <div class="session-title">🎮 Game Development Concepts</div>
+        <ul>
+          <li><strong>Game Mechanics:</strong> Player movement, collision detection, scoring systems</li>
+          <li><strong>Physics Simulation:</strong> Gravity, velocity, acceleration, bouncing objects</li>
+          <li><strong>User Interface:</strong> Menus, buttons, score displays, game over screens</li>
+          <li><strong>Asset Management:</strong> Images, sounds, sprites, animation frames</li>
+        </ul>
+      </div>
+      <div class="session">
+        <div class="session-title">💼 Portfolio Projects</div>
+        <ul>
+          <li><strong>GUI Calculator:</strong> Demonstrates user input and mathematical operations</li>
+          <li><strong>Interactive Drawing App:</strong> Shows canvas manipulation and creative tools</li>
+          <li><strong>Arcade-Style Games:</strong> Complete games with scoring and difficulty progression</li>
+          <li><strong>Portfolio Ready:</strong> Five complete projects to showcase programming skills</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const headers = document.querySelectorAll('.module-header');
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+    // Optionally, expand the first module by default for engagement
+    document.addEventListener('DOMContentLoaded', () => {
+      const firstContent = document.querySelector('.module-content');
+      if (firstContent) firstContent.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

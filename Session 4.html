@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 4: Mini Project – Click Game - Python GUI Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .lesson-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .lesson-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .lesson-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .lesson-subtitle {
+      font-size: 1.2rem;
+      color: #6c757d;
+      font-weight: 400;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      padding: 2rem;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-learn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-concepts { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .card-goal { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-content {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .card-content ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card-content li {
+      margin-bottom: 0.7rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .card-content li::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border-left: 5px solid #667eea;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      color: #5a6c7d;
+      margin-bottom: 1.5rem;
+    }
+
+    .code-container {
+      background: #1e1e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-header {
+      background: #2d2d3f;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3c3c54;
+    }
+
+    .code-title {
+      color: #a6adc8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .code-editor {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .code-editor code {
+      color: #cdd6f4;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .run-btn {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    .run-btn:hover {
+      box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+    }
+
+    .live-editor {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 2px solid #e1e8ed;
+      background: #f8fafc;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .live-editor:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 4px solid #667eea;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-content {
+      color: #424242;
+      line-height: 1.7;
+    }
+
+    .tip-content ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .tip-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+      border-left: 4px solid #ff7043;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .challenge-title {
+      font-weight: 600;
+      color: #d84315;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .progress-step.completed {
+      background: #28a745;
+    }
+
+    .progress-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 60px;
+      height: 2px;
+      background: #dee2e6;
+      transform: translateY(-50%);
+    }
+
+    .progress-step:last-child::after {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .lesson-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .lesson-title {
+        font-size: 2rem;
+      }
+      
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 1.5rem;
+      }
+      
+      .code-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <!-- Header Section -->
+    <div class="lesson-header">
+      <h1 class="lesson-title">Session 4: Mini Project – Click Game</h1>
+      <p class="lesson-subtitle">Build Your First Interactive Game with Tkinter</p>
+        <p style="font-size: 1rem; opacity: 0.8; margin-top: 0.5rem;">Created by Teacher Theo</p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-step completed">1</div>
+      <div class="progress-step completed">2</div>
+      <div class="progress-step completed">3</div>
+      <div class="progress-step completed">4</div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+      <div class="info-card card-learn">
+        <div class="card-title">🎮 What You'll Learn</div>
+        <div class="card-content">
+          <ul>
+            <li>Implement game logic with state management</li>
+            <li>Create dynamic scoring systems</li>
+            <li>Build countdown timers and game loops</li>
+            <li>Handle random positioning and events</li>
+            <li>Design engaging user interfaces for games</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-concepts">
+        <div class="card-title">🔧 Key Concepts</div>
+        <div class="card-content">
+          <ul>
+            <li><strong>Random Positioning:</strong> Dynamic button placement using random coordinates</li>
+            <li><strong>Click Events:</strong> Responding to user interactions and button clicks</li>
+            <li><strong>Time Tracking:</strong> Countdown timers and game duration management</li>
+            <li><strong>Score System:</strong> Point tracking and performance metrics</li>
+            <li><strong>Game States:</strong> Start, playing, and game over conditions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-goal">
+        <div class="card-title">🚀 Project Goal</div>
+        <div class="card-content">
+          Build a complete click game featuring:
+          <ul>
+            <li>Moving target buttons with random positioning</li>
+            <li>Real-time score counter and timer display</li>
+            <li>Game start/stop controls and difficulty levels</li>
+            <li>High score tracking and game statistics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic Game Setup -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+        Game Foundation - Random Button Click
+      </h2>
+      <p class="section-description">
+        Start by creating a simple game where a button moves to random positions when clicked. Learn the basics of random positioning and click tracking.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">random_button_game.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor1', 'code1')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor1')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code1">
+<pre><code>import tkinter as tk
+import random
+
+class SimpleClickGame:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Random Button Click Game")
+        self.root.geometry("600x500")
+        self.root.configure(bg="#2c3e50")
+        
+        # Game variables
+        self.clicks = 0
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        # Title
+        title_label = tk.Label(
+            self.root,
+            text="🎯 Click the Moving Button!",
+            font=("Arial", 20, "bold"),
+            bg="#2c3e50",
+            fg="white"
+        )
+        title_label.pack(pady=20)
+        
+        # Score display
+        self.score_label = tk.Label(
+            self.root,
+            text=f"Clicks: {self.clicks}",
+            font=("Arial", 16, "bold"),
+            bg="#2c3e50",
+            fg="#3498db"
+        )
+        self.score_label.pack(pady=10)
+        
+        # Game area frame
+        self.game_frame = tk.Frame(
+            self.root,
+            width=500,
+            height=300,
+            bg="#ecf0f1",
+            relief="solid",
+            bd=2
+        )
+        self.game_frame.pack(pady=20)
+        self.game_frame.pack_propagate(False)  # Maintain fixed size
+        
+        # The moving button
+        self.target_button = tk.Button(
+            self.game_frame,
+            text="🎯 Click Me!",
+            font=("Arial", 12, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=15,
+            pady=8,
+            command=self.button_clicked,
+            cursor="hand2"
+        )
+        
+        # Place button at initial random position
+        self.move_button()
+        
+        # Instructions
+        instructions = tk.Label(
+            self.root,
+            text="Click the red button to score points! It will move to a new position each time.",
+            font=("Arial", 11),
+            bg="#2c3e50",
+            fg="#bdc3c7",
+            wraplength=500
+        )
+        instructions.pack(pady=10)
+        
+        # Reset button
+        reset_btn = tk.Button(
+            self.root,
+            text="🔄 Reset Game",
+            command=self.reset_game,
+            font=("Arial", 12, "bold"),
+            bg="#95a5a6",
+            fg="white",
+            padx=20,
+            pady=8,
+            cursor="hand2"
+        )
+        reset_btn.pack(pady=10)
+    
+    def button_clicked(self):
+        """Handle when the target button is clicked"""
+        self.clicks += 1
+        self.score_label.config(text=f"Clicks: {self.clicks}")
+        
+        # Move button to new random position
+        self.move_button()
+        
+        # Change button color for visual feedback
+        colors = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6"]
+        new_color = random.choice(colors)
+        self.target_button.config(bg=new_color)
+        
+        # Give positive feedback
+        if self.clicks % 5 == 0:
+            self.show_milestone_message()
+    
+    def move_button(self):
+        """Move the button to a random position within the game frame"""
+        # Get button size (approximate)
+        button_width = 100
+        button_height = 40
+        
+        # Calculate available space (frame size minus button size)
+        max_x = 500 - button_width
+        max_y = 300 - button_height
+        
+        # Generate random position
+        x = random.randint(10, max_x - 10)
+        y = random.randint(10, max_y - 10)
+        
+        # Place button at new position
+        self.target_button.place(x=x, y=y)
+    
+    def show_milestone_message(self):
+        """Show congratulatory message at milestones"""
+        milestone_label = tk.Label(
+            self.root,
+            text=f"🎉 {self.clicks} clicks! Great job!",
+            font=("Arial", 14, "bold"),
+            bg="#27ae60",
+            fg="white",
+            padx=20,
+            pady=5
+        )
+        milestone_label.pack(pady=5)
+        
+        # Remove the message after 2 seconds
+        self.root.after(2000, milestone_label.destroy)
+    
+    def reset_game(self):
+        """Reset the game to initial state"""
+        self.clicks = 0
+        self.score_label.config(text=f"Clicks: {self.clicks}")
+        self.target_button.config(bg="#e74c3c", text="🎯 Click Me!")
+        self.move_button()
+    
+    def run(self):
+        """Start the game"""
+        self.root.mainloop()
+
+# Create and run the game
+if __name__ == "__main__":
+    game = SimpleClickGame()
+    game.run()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor1" class="live-editor" placeholder="Try modifying the button colors, sizes, or adding sound effects..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">💡 Understanding Random Positioning</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>random.randint():</strong> Generates random integers within a specified range</li>
+            <li><strong>.place():</strong> Positions widgets at specific x,y coordinates</li>
+            <li><strong>Boundary Checking:</strong> Ensure buttons stay within the game area</li>
+            <li><strong>Visual Feedback:</strong> Color changes and messages enhance user experience</li>
+            <li><strong>State Management:</strong> Track game variables like clicks and positions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Adding Timer and Game Logic -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+        Timer System and Game States
+      </h2>
+      <p class="section-description">
+        Add a countdown timer and proper game states (start, playing, game over) to create a more engaging gaming experience.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">timed_click_game.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor2', 'code2')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor2')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code2">
+<pre><code>import tkinter as tk
+import random
+import time
+
+class TimedClickGame:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Timed Click Challenge")
+        self.root.geometry("700x600")
+        self.root.configure(bg="#2c3e50")
+        
+        # Game variables
+        self.score = 0
+        self.time_left = 30  # 30 seconds game
+        self.game_running = False
+        self.timer_job = None
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        # Title
+        title_label = tk.Label(
+            self.root,
+            text="⏰ Timed Click Challenge",
+            font=("Arial", 24, "bold"),
+            bg="#2c3e50",
+            fg="white"
+        )
+        title_label.pack(pady=20)
+        
+        # Game info frame
+        info_frame = tk.Frame(self.root, bg="#34495e")
+        info_frame.pack(fill="x", padx=20, pady=10)
+        
+        # Score display
+        self.score_label = tk.Label(
+            info_frame,
+            text=f"Score: {self.score}",
+            font=("Arial", 18, "bold"),
+            bg="#34495e",
+            fg="#3498db"
+        )
+        self.score_label.pack(side="left", padx=20, pady=10)
+        
+        # Timer display
+        self.timer_label = tk.Label(
+            info_frame,
+            text=f"Time: {self.time_left}s",
+            font=("Arial", 18, "bold"),
+            bg="#34495e",
+            fg="#e74c3c"
+        )
+        self.timer_label.pack(side="right", padx=20, pady=10)
+        
+        # Game area frame
+        self.game_frame = tk.Frame(
+            self.root,
+            width=600,
+            height=350,
+            bg="#ecf0f1",
+            relief="solid",
+            bd=3
+        )
+        self.game_frame.pack(pady=20)
+        self.game_frame.pack_propagate(False)
+        
+        # Target button (initially hidden)
+        self.target_button = tk.Button(
+            self.game_frame,
+            text="🎯 CLICK!",
+            font=("Arial", 12, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=20,
+            pady=10,
+            command=self.target_clicked,
+            cursor="hand2"
+        )
+        
+        # Game status label
+        self.status_label = tk.Label(
+            self.game_frame,
+            text="Click 'Start Game' to begin!",
+            font=("Arial", 16, "bold"),
+            bg="#ecf0f1",
+            fg="#7f8c8d"
+        )
+        self.status_label.pack(expand=True)
+        
+        # Control buttons frame
+        control_frame = tk.Frame(self.root, bg="#2c3e50")
+        control_frame.pack(pady=20)
+        
+        # Start button
+        self.start_button = tk.Button(
+            control_frame,
+            text="▶️ Start Game",
+            command=self.start_game,
+            font=("Arial", 14, "bold"),
+            bg="#27ae60",
+            fg="white",
+            padx=25,
+            pady=10,
+            cursor="hand2"
+        )
+        self.start_button.pack(side="left", padx=10)
+        
+        # Stop button
+        self.stop_button = tk.Button(
+            control_frame,
+            text="⏹️ Stop Game",
+            command=self.stop_game,
+            font=("Arial", 14, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=25,
+            pady=10,
+            cursor="hand2",
+            state="disabled"
+        )
+        self.stop_button.pack(side="left", padx=10)
+        
+        # Reset button
+        reset_button = tk.Button(
+            control_frame,
+            text="🔄 Reset",
+            command=self.reset_game,
+            font=("Arial", 14, "bold"),
+            bg="#95a5a6",
+            fg="white",
+            padx=25,
+            pady=10,
+            cursor="hand2"
+        )
+        reset_button.pack(side="left", padx=10)
+        
+        # Game instructions
+        instructions = tk.Label(
+            self.root,
+            text="🎮 Click the target as many times as possible in 30 seconds!\n🏆 Each click scores 1 point • Target moves after each click",
+            font=("Arial", 11),
+            bg="#2c3e50",
+            fg="#bdc3c7",
+            justify="center"
+        )
+        instructions.pack(pady=15)
+    
+    def start_game(self):
+        """Start the game"""
+        self.game_running = True
+        self.score = 0
+        self.time_left = 30
+        
+        # Update UI
+        self.start_button.config(state="disabled")
+        self.stop_button.config(state="normal")
+        self.status_label.pack_forget()  # Hide status message
+        
+        # Show and position target button
+        self.move_target()
+        self.target_button.place_configure()  # Make button visible
+        
+        # Start timer
+        self.update_timer()
+        
+        # Update displays
+        self.update_score()
+        self.update_timer_display()
+    
+    def stop_game(self):
+        """Stop the game"""
+        self.game_running = False
+        
+        # Cancel timer if running
+        if self.timer_job:
+            self.root.after_cancel(self.timer_job)
+            self.timer_job = None
+        
+        # Update UI
+        self.start_button.config(state="normal")
+        self.stop_button.config(state="disabled")
+        self.target_button.place_forget()  # Hide target button
+        
+        # Show final score
+        self.show_game_over()
+    
+    def reset_game(self):
+        """Reset game to initial state"""
+        self.stop_game()
+        self.score = 0
+        self.time_left = 30
+        self.update_score()
+        self.update_timer_display()
+        
+        # Show initial status
+        self.status_label.config(text="Click 'Start Game' to begin!")
+        self.status_label.pack(expand=True)
+    
+    def target_clicked(self):
+        """Handle target button click"""
+        if not self.game_running:
+            return
+            
+        self.score += 1
+        self.update_score()
+        self.move_target()
+        
+        # Visual feedback
+        self.flash_target()
+    
+    def move_target(self):
+        """Move target to random position"""
+        if not self.game_running:
+            return
+            
+        # Button dimensions
+        btn_width = 80
+        btn_height = 40
+        
+        # Calculate bounds
+        max_x = 600 - btn_width
+        max_y = 350 - btn_height
+        
+        # Random position
+        x = random.randint(10, max_x - 10)
+        y = random.randint(10, max_y - 10)
+        
+        self.target_button.place(x=x, y=y)
+    
+    def flash_target(self):
+        """Create visual feedback when target is clicked"""
+        original_color = self.target_button.cget("bg")
+        self.target_button.config(bg="#f1c40f")  # Flash yellow
+        self.root.after(100, lambda: self.target_button.config(bg=original_color))
+    
+    def update_timer(self):
+        """Update the game timer"""
+        if not self.game_running:
+            return
+            
+        if self.time_left > 0:
+            self.time_left -= 1
+            self.update_timer_display()
+            # Schedule next timer update
+            self.timer_job = self.root.after(1000, self.update_timer)
+        else:
+            # Time's up!
+            self.stop_game()
+    
+    def update_score(self):
+        """Update score display"""
+        self.score_label.config(text=f"Score: {self.score}")
+    
+    def update_timer_display(self):
+        """Update timer display"""
+        self.timer_label.config(text=f"Time: {self.time_left}s")
+        
+        # Change color as time runs out
+        if self.time_left <= 5:
+            self.timer_label.config(fg="#e74c3c")  # Red
+        elif self.time_left <= 10:
+            self.timer_label.config(fg="#f39c12")  # Orange
+        else:
+            self.timer_label.config(fg="#27ae60")  # Green
+    
+    def show_game_over(self):
+        """Show game over screen"""
+        self.status_label.config(
+            text=f"🎉 Game Over! 🎉\nFinal Score: {self.score} points\nClick 'Start Game' to play again!",
+            fg="#2c3e50"
+        )
+        self.status_label.pack(expand=True)
+        
+        # Calculate performance
+        if self.score >= 20:
+            performance = "🏆 Excellent! Lightning fast reflexes!"
+        elif self.score >= 15:
+            performance = "🥈 Great job! Very good clicking speed!"
+        elif self.score >= 10:
+            performance = "🥉 Good work! Keep practicing!"
+        else:
+            performance = "💪 Nice try! Practice makes perfect!"
+        
+        # Show performance message briefly
+        perf_label = tk.Label(
+            self.root,
+            text=performance,
+            font=("Arial", 12, "bold"),
+            bg="#3498db",
+            fg="white",
+            padx=20,
+            pady=10
+        )
+        perf_label.pack(pady=10)
+        self.root.after(3000, perf_label.destroy)
+    
+    def run(self):
+        """Start the application"""
+        self.root.mainloop()
+
+# Create and run the game
+if __name__ == "__main__":
+    game = TimedClickGame()
+    game.run()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor2" class="live-editor" placeholder="Try adding different difficulty levels or power-ups to make the game more interesting..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">⏱️ Timer and Game State Management</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>self.root.after():</strong> Schedule functions to run after a delay (non-blocking)</li>
+            <li><strong>Game States:</strong> Use boolean flags to control when game features are active</li>
+            <li><strong>Timer Cancellation:</strong> Always cancel scheduled timers when stopping the game</li>
+            <li><strong>UI State Updates:</strong> Enable/disable buttons based on game state</li>
+            <li><strong>Performance Feedback:</strong> Give players meaningful feedback about their performance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Complete Click Game with Features -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+        Advanced Click Game with Features
+      </h2>
+      <p class="section-description">
+        Build a complete click game with difficulty levels, high scores, power-ups, and advanced game mechanics for maximum engagement.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">advanced_click_game.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor3', 'code3')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor3')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code3">
+<pre><code>import tkinter as tk
+from tkinter import messagebox
+import random
+import json
+import os
+
+class AdvancedClickGame:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Ultimate Click Challenge - Pro Edition")
+        self.root.geometry("800x700")
+        self.root.configure(bg="#2c3e50")
+        
+        # Game variables
+        self.score = 0
+        self.time_left = 30
+        self.game_running = False
+        self.timer_job = None
+        self.difficulty = "Medium"
+        self.target_size = "normal"
+        self.power_ups = []
+        self.high_scores = self.load_high_scores()
+        
+        # Difficulty settings
+        self.difficulties = {
+            "Easy": {"time": 45, "target_speed": 2000, "target_size": 1.2},
+            "Medium": {"time": 30, "target_speed": 1500, "target_size": 1.0},
+            "Hard": {"time": 20, "target_speed": 1000, "target_size": 0.8},
+            "Extreme": {"time": 15, "target_speed": 800, "target_size": 0.6}
+        }
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        # Title
+        title_label = tk.Label(
+            self.root,
+            text="🎯 Ultimate Click Challenge",
+            font=("Arial", 28, "bold"),
+            bg="#2c3e50",
+            fg="white"
+        )
+        title_label.pack(pady=15)
+        
+        # Top info frame
+        top_frame = tk.Frame(self.root, bg="#34495e")
+        top_frame.pack(fill="x", padx=20, pady=5)
+        
+        # Score and timer
+        self.score_label = tk.Label(
+            top_frame,
+            text=f"Score: {self.score}",
+            font=("Arial", 16, "bold"),
+            bg="#34495e",
+            fg="#3498db"
+        )
+        self.score_label.pack(side="left", padx=15, pady=8)
+        
+        self.timer_label = tk.Label(
+            top_frame,
+            text=f"Time: {self.time_left}s",
+            font=("Arial", 16, "bold"),
+            bg="#34495e",
+            fg="#e74c3c"
+        )
+        self.timer_label.pack(side="right", padx=15, pady=8)
+        
+        # High score display
+        best_score = max(self.high_scores.values()) if self.high_scores else 0
+        self.high_score_label = tk.Label(
+            top_frame,
+            text=f"🏆 Best: {best_score}",
+            font=("Arial", 14, "bold"),
+            bg="#34495e",
+            fg="#f1c40f"
+        )
+        self.high_score_label.pack(pady=8)
+        
+        # Difficulty selection
+        difficulty_frame = tk.Frame(self.root, bg="#2c3e50")
+        difficulty_frame.pack(pady=10)
+        
+        tk.Label(
+            difficulty_frame,
+            text="Difficulty:",
+            font=("Arial", 12, "bold"),
+            bg="#2c3e50",
+            fg="white"
+        ).pack(side="left", padx=(0, 10))
+        
+        self.difficulty_var = tk.StringVar(value=self.difficulty)
+        for diff in self.difficulties.keys():
+            tk.Radiobutton(
+                difficulty_frame,
+                text=diff,
+                variable=self.difficulty_var,
+                value=diff,
+                command=self.change_difficulty,
+                font=("Arial", 10),
+                bg="#2c3e50",
+                fg="white",
+                selectcolor="#34495e",
+                cursor="hand2"
+            ).pack(side="left", padx=5)
+        
+        # Game area
+        self.game_frame = tk.Frame(
+            self.root,
+            width=700,
+            height=400,
+            bg="#ecf0f1",
+            relief="solid",
+            bd=3
+        )
+        self.game_frame.pack(pady=15)
+        self.game_frame.pack_propagate(False)
+        
+        # Target button
+        self.target_button = tk.Button(
+            self.game_frame,
+            text="🎯",
+            font=("Arial", 16, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=15,
+            pady=8,
+            command=self.target_clicked,
+            cursor="hand2",
+            relief="raised",
+            bd=3
+        )
+        
+        # Power-up buttons (special targets)
+        self.power_up_buttons = []
+        
+        # Game status
+        self.status_label = tk.Label(
+            self.game_frame,
+            text="🎮 Select difficulty and click 'Start Game'!",
+            font=("Arial", 16, "bold"),
+            bg="#ecf0f1",
+            fg="#7f8c8d"
+        )
+        self.status_label.pack(expand=True)
+        
+        # Control buttons
+        control_frame = tk.Frame(self.root, bg="#2c3e50")
+        control_frame.pack(pady=15)
+        
+        self.start_button = tk.Button(
+            control_frame,
+            text="▶️ Start Game",
+            command=self.start_game,
+            font=("Arial", 14, "bold"),
+            bg="#27ae60",
+            fg="white",
+            padx=30,
+            pady=12,
+            cursor="hand2"
+        )
+        self.start_button.grid(row=0, column=0, padx=10)
+        
+        self.stop_button = tk.Button(
+            control_frame,
+            text="⏹️ Stop",
+            command=self.stop_game,
+            font=("Arial", 14, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=30,
+            pady=12,
+            cursor="hand2",
+            state="disabled"
+        )
+        self.stop_button.grid(row=0, column=1, padx=10)
+        
+        tk.Button(
+            control_frame,
+            text="🏆 High Scores",
+            command=self.show_high_scores,
+            font=("Arial", 14, "bold"),
+            bg="#9b59b6",
+            fg="white",
+            padx=25,
+            pady=12,
+            cursor="hand2"
+        ).grid(row=0, column=2, padx=10)
+        
+        tk.Button(
+            control_frame,
+            text="🔄 Reset",
+            command=self.reset_game,
+            font=("Arial", 14, "bold"),
+            bg="#95a5a6",
+            fg="white",
+            padx=30,
+            pady=12,
+            cursor="hand2"
+        ).grid(row=0, column=3, padx=10)
+        
+        # Game info
+        info_text = f"🎯 Click targets to score • 🌟 Gold targets = 5 points • 💎 Diamond targets = 10 points"
+        tk.Label(
+            self.root,
+            text=info_text,
+            font=("Arial", 10),
+            bg="#2c3e50",
+            fg="#bdc3c7",
+            wraplength=750
+        ).pack(pady=10)
+    
+    def change_difficulty(self):
+        """Change game difficulty"""
+        self.difficulty = self.difficulty_var.get()
+        self.time_left = self.difficulties[self.difficulty]["time"]
+        self.update_timer_display()
+    
+    def start_game(self):
+        """Start the game"""
+        self.game_running = True
+        self.score = 0
+        self.time_left = self.difficulties[self.difficulty]["time"]
+        
+        # UI updates
+        self.start_button.config(state="disabled")
+        self.stop_button.config(state="normal")
+        self.status_label.pack_forget()
+        
+        # Start spawning targets
+        self.spawn_target()
+        self.update_timer()
+        
+        # Update displays
+        self.update_score()
+        self.update_timer_display()
+    
+    def stop_game(self):
+        """Stop the game"""
+        self.game_running = False
+        
+        if self.timer_job:
+            self.root.after_cancel(self.timer_job)
+            self.timer_job = None
+        
+        # Hide all targets
+        self.target_button.place_forget()
+        for btn in self.power_up_buttons:
+            btn.destroy()
+        self.power_up_buttons.clear()
+        
+        # UI updates
+        self.start_button.config(state="normal")
+        self.stop_button.config(state="disabled")
+        
+        # Check for high score
+        self.check_high_score()
+        
+        # Show game over
+        self.show_game_over()
+    
+    def reset_game(self):
+        """Reset to initial state"""
+        self.stop_game()
+        self.score = 0
+        self.update_score()
+        self.status_label.config(text="🎮 Select difficulty and click 'Start Game'!")
+        self.status_label.pack(expand=True)
+    
+    def spawn_target(self):
+        """Spawn a new target"""
+        if not self.game_running:
+            return
+        
+        # Hide current target
+        self.target_button.place_forget()
+        
+        # Sometimes spawn special targets
+        if random.random() < 0.2:  # 20% chance for special target
+            self.spawn_power_up()
+        else:
+            self.spawn_normal_target()
+        
+        # Schedule next target spawn
+        speed = self.difficulties[self.difficulty]["target_speed"]
+        self.root.after(speed, self.spawn_target)
+    
+    def spawn_normal_target(self):
+        """Spawn a normal target"""
+        # Adjust size based on difficulty
+        size_multiplier = self.difficulties[self.difficulty]["target_size"]
+        base_size = int(20 * size_multiplier)
+        
+        self.target_button.config(
+            text="🎯",
+            bg="#e74c3c",
+            font=("Arial", base_size, "bold"),
+            padx=int(15 * size_multiplier),
+            pady=int(8 * size_multiplier)
+        )
+        
+        self.move_button(self.target_button)
+    
+    def spawn_power_up(self):
+        """Spawn a special power-up target"""
+        power_type = random.choice(["gold", "diamond"])
+        
+        # Create power-up button
+        power_btn = tk.Button(
+            self.game_frame,
+            text="🌟" if power_type == "gold" else "💎",
+            font=("Arial", 14, "bold"),
+            bg="#f1c40f" if power_type == "gold" else "#3498db",
+            fg="white",
+            padx=10,
+            pady=5,
+            command=lambda: self.power_up_clicked(power_type, power_btn),
+            cursor="hand2",
+            relief="raised",
+            bd=2
+        )
+        
+        self.power_up_buttons.append(power_btn)
+        self.move_button(power_btn)
+        
+        # Auto-remove after 3 seconds
+        self.root.after(3000, lambda: self.remove_power_up(power_btn))
+    
+    def move_button(self, button):
+        """Move a button to random position"""
+        max_x = 650
+        max_y = 350
+        
+        x = random.randint(10, max_x)
+        y = random.randint(10, max_y)
+        
+        button.place(x=x, y=y)
+    
+    def target_clicked(self):
+        """Handle normal target click"""
+        if not self.game_running:
+            return
+        
+        self.score += 1
+        self.update_score()
+        self.target_button.place_forget()
+        
+        # Visual feedback
+        self.show_score_popup("+1", "#27ae60")
+    
+    def power_up_clicked(self, power_type, button):
+        """Handle power-up click"""
+        if not self.game_running:
+            return
+        
+        points = 5 if power_type == "gold" else 10
+        self.score += points
+        self.update_score()
+        
+        # Remove power-up
+        self.remove_power_up(button)
+        
+        # Show special feedback
+        color = "#f1c40f" if power_type == "gold" else "#3498db"
+        self.show_score_popup(f"+{points}!", color)
+    
+    def remove_power_up(self, button):
+        """Remove a power-up button"""
+        if button in self.power_up_buttons:
+            self.power_up_buttons.remove(button)
+            button.destroy()
+    
+    def show_score_popup(self, text, color):
+        """Show floating score popup"""
+        popup = tk.Label(
+            self.root,
+            text=text,
+            font=("Arial", 16, "bold"),
+            bg=color,
+            fg="white",
+            padx=15,
+            pady=5
+        )
+        popup.pack()
+        
+        # Animate popup
+        def animate(step=0):
+            if step < 10:
+                popup.pack_configure(pady=(5-step, 0))
+                self.root.after(50, lambda: animate(step+1))
+            else:
+                popup.destroy()
+        
+        animate()
+    
+    def update_timer(self):
+        """Update game timer"""
+        if not self.game_running:
+            return
+        
+        if self.time_left > 0:
+            self.time_left -= 1
+            self.update_timer_display()
+            self.timer_job = self.root.after(1000, self.update_timer)
+        else:
+            self.stop_game()
+    
+    def update_score(self):
+        """Update score display"""
+        self.score_label.config(text=f"Score: {self.score}")
+    
+    def update_timer_display(self):
+        """Update timer display with color coding"""
+        self.timer_label.config(text=f"Time: {self.time_left}s")
+        
+        if self.time_left <= 5:
+            self.timer_label.config(fg="#e74c3c")
+        elif self.time_left <= 10:
+            self.timer_label.config(fg="#f39c12")
+        else:
+            self.timer_label.config(fg="#27ae60")
+    
+    def show_game_over(self):
+        """Show game over screen"""
+        performance_msg = self.get_performance_message()
+        
+        self.status_label.config(
+            text=f"🎉 Game Over! 🎉\n{performance_msg}\nFinal Score: {self.score} points",
+            fg="#2c3e50"
+        )
+        self.status_label.pack(expand=True)
+    
+    def get_performance_message(self):
+        """Get performance message based on score"""
+        if self.score >= 50:
+            return "🏆 LEGENDARY! Absolutely incredible!"
+        elif self.score >= 35:
+            return "🥇 AMAZING! Lightning reflexes!"
+        elif self.score >= 25:
+            return "🥈 EXCELLENT! Great clicking skills!"
+        elif self.score >= 15:
+            return "🥉 GOOD! Keep practicing!"
+        else:
+            return "💪 Nice try! Practice makes perfect!"
+    
+    def check_high_score(self):
+        """Check and update high scores"""
+        if self.score > 0:
+            self.high_scores[self.difficulty] = max(
+                self.high_scores.get(self.difficulty, 0),
+                self.score
+            )
+            self.save_high_scores()
+            
+            # Update display
+            best_score = max(self.high_scores.values())
+            self.high_score_label.config(text=f"🏆 Best: {best_score}")
+    
+    def show_high_scores(self):
+        """Show high scores window"""
+        scores_text = "🏆 HIGH SCORES 🏆\n\n"
+        for difficulty, score in self.high_scores.items():
+            scores_text += f"{difficulty}: {score} points\n"
+        
+        if not self.high_scores:
+            scores_text += "No scores yet! Play a game to set records!"
+        
+        messagebox.showinfo("High Scores", scores_text)
+    
+    def load_high_scores(self):
+        """Load high scores from file"""
+        try:
+            if os.path.exists("click_game_scores.json"):
+                with open("click_game_scores.json", "r") as f:
+                    return json.load(f)
+        except:
+            pass
+        return {}
+    
+    def save_high_scores(self):
+        """Save high scores to file"""
+        try:
+            with open("click_game_scores.json", "w") as f:
+                json.dump(self.high_scores, f)
+        except:
+            pass
+    
+    def run(self):
+        """Start the game"""
+        self.root.mainloop()
+
+# Create and run the game
+if __name__ == "__main__":
+    game = AdvancedClickGame()
+    game.run()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor3" class="live-editor" placeholder="This is your complete click game! Try adding multiplayer features, achievements, or different game modes..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🚀 Advanced Game Features</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Difficulty Levels:</strong> Adjust game parameters based on player skill level</li>
+            <li><strong>Power-ups:</strong> Special targets with bonus points and visual effects</li>
+            <li><strong>High Score System:</strong> Persistent data storage using JSON files</li>
+            <li><strong>Dynamic UI:</strong> Responsive interfaces that adapt to game state</li>
+            <li><strong>Performance Analytics:</strong> Meaningful feedback based on player performance</li>
+            <li><strong>Visual Feedback:</strong> Animations and color changes for better user experience</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="challenge-box">
+        <div class="challenge-title">🎯 Game Enhancement Challenges</div>
+        <div class="tip-content">
+          Take your click game to the next level:
+          <ul>
+            <li><strong>Multiplayer Mode:</strong> Add two-player split screen competition</li>
+            <li><strong>Achievement System:</strong> Unlock badges for special accomplishments</li>
+            <li><strong>Game Modes:</strong> Survival mode, accuracy challenge, or moving targets</li>
+            <li><strong>Sound Effects:</strong> Add audio feedback for clicks and achievements</li>
+            <li><strong>Leaderboards:</strong> Online score sharing and global rankings</li>
+            <li><strong>Themes:</strong> Different visual themes and target styles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+      <h2 style="color: white; margin-bottom: 1rem;">🎊 Game Development Master!</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+        You've successfully built a complete interactive game with professional features!
+      </p>
+      <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <h3 style="margin-bottom: 1rem;">✅ Game Development Skills Mastered:</h3>
+        <ul style="text-align: left; display: inline-block;">
+          <li>Implementing game logic with state management and flow control</li>
+          <li>Creating dynamic scoring systems and performance tracking</li>
+          <li>Building countdown timers and real-time game loops</li>
+          <li>Handling random positioning and event-driven programming</li>
+          <li>Designing engaging user interfaces with visual feedback</li>
+          <li>Implementing advanced features like difficulty levels and high scores</li>
+        </ul>
+      </div>
+      <p style="font-size: 1.1rem; margin-top: 1.5rem;">
+        <strong>Congratulations!</strong> You've completed the fundamentals of Python GUI programming with Tkinter! 🚀
+      </p>
+      <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+        <h4 style="margin-bottom: 1rem;">🎓 Your Programming Journey:</h4>
+        <p style="font-size: 1rem;">
+          ✅ Session 1: Tkinter Basics & First Apps<br>
+          ✅ Session 2: User Input & Calculator Project<br>
+          ✅ Session 3: Graphics & Drawing Applications<br>
+          ✅ Session 4: Game Development & Interactive Programming
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToEditor(editorId, codeId) {
+      const textarea = document.getElementById(editorId);
+      const codeBlock = document.getElementById(codeId);
+      if (textarea && codeBlock) {
+        const code = codeBlock.innerText.trim();
+        textarea.value = code;
+        textarea.focus();
+        textarea.select();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(code).then(() => {
+          // Visual feedback
+          const btn = event.target;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '✅ Copied!';
+          btn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+          
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          }, 2000);
+        }).catch(() => {
+          // Fallback for older browsers
+          textarea.select();
+          document.execCommand('copy');
+        });
+      }
+    }
+
+    function runOnline(editorId) {
+      const textarea = document.getElementById(editorId);
+      if (textarea && textarea.value.trim()) {
+        const code = textarea.value;
+        const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+        window.open(url, '_blank');
+      } else {
+        // If editor is empty, use the example code
+        const codeId = editorId.replace('editor', 'code');
+        const codeBlock = document.getElementById(codeId);
+        if (codeBlock) {
+          const code = codeBlock.innerText.trim();
+          const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+          window.open(url, '_blank');
+        }
+      }
+    }
+
+    // Auto-focus first editor when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstEditor = document.getElementById('editor1');
+      if (firstEditor) {
+        firstEditor.focus();
+      }
+    });
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

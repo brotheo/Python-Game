@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 3: Drawing with Tkinter - Python GUI Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .lesson-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .lesson-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .lesson-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .lesson-subtitle {
+      font-size: 1.2rem;
+      color: #6c757d;
+      font-weight: 400;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      padding: 2rem;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-learn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-concepts { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .card-goal { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-content {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .card-content ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card-content li {
+      margin-bottom: 0.7rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .card-content li::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border-left: 5px solid #667eea;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      color: #5a6c7d;
+      margin-bottom: 1.5rem;
+    }
+
+    .code-container {
+      background: #1e1e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-header {
+      background: #2d2d3f;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3c3c54;
+    }
+
+    .code-title {
+      color: #a6adc8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .code-editor {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .code-editor code {
+      color: #cdd6f4;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .run-btn {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    .run-btn:hover {
+      box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+    }
+
+    .live-editor {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 2px solid #e1e8ed;
+      background: #f8fafc;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .live-editor:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 4px solid #667eea;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-content {
+      color: #424242;
+      line-height: 1.7;
+    }
+
+    .tip-content ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .tip-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+      border-left: 4px solid #ff7043;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .challenge-title {
+      font-weight: 600;
+      color: #d84315;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .progress-step.completed {
+      background: #28a745;
+    }
+
+    .progress-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 60px;
+      height: 2px;
+      background: #dee2e6;
+      transform: translateY(-50%);
+    }
+
+    .progress-step:last-child::after {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .lesson-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .lesson-title {
+        font-size: 2rem;
+      }
+      
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 1.5rem;
+      }
+      
+      .code-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <!-- Header Section -->
+    <div class="lesson-header">
+      <h1 class="lesson-title">Session 3: Drawing with Tkinter</h1>
+      <p class="lesson-subtitle">Create Visual Art with Canvas Widgets and Graphics</p>
+        <p style="font-size: 1rem; opacity: 0.8; margin-top: 0.5rem;">Created by Teacher Theo</p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-step completed">1</div>
+      <div class="progress-step completed">2</div>
+      <div class="progress-step completed">3</div>
+      <div class="progress-step">4</div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+      <div class="info-card card-learn">
+        <div class="card-title">🎨 What You'll Learn</div>
+        <div class="card-content">
+          <ul>
+            <li>Master the Canvas widget for graphics programming</li>
+            <li>Draw shapes, lines, and complex patterns</li>
+            <li>Work with colors, fills, and outlines</li>
+            <li>Handle mouse events for interactive drawing</li>
+            <li>Build a complete digital art application</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-concepts">
+        <div class="card-title">🔧 Key Concepts</div>
+        <div class="card-content">
+          <ul>
+            <li><strong>Canvas Widget:</strong> The drawing surface for graphics</li>
+            <li><strong>create_rectangle():</strong> Drawing rectangular shapes</li>
+            <li><strong>create_oval():</strong> Creating circles and ellipses</li>
+            <li><strong>create_line():</strong> Drawing lines and paths</li>
+            <li><strong>Mouse Events:</strong> Interactive drawing and painting</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-goal">
+        <div class="card-title">🚀 Project Goal</div>
+        <div class="card-content">
+          Build a digital drawing pad featuring:
+          <ul>
+            <li>Multiple drawing tools (shapes, brushes)</li>
+            <li>Color selection palette</li>
+            <li>Interactive mouse drawing</li>
+            <li>Clear and save functionality</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Canvas Basics -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+        Introduction to Canvas Widget
+      </h2>
+      <p class="section-description">
+        The Canvas widget is your digital drawing board. Learn to create a canvas and draw basic shapes with precise control.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">canvas_basics.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor1', 'code1')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor1')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code1">
+<pre><code>import tkinter as tk
+
+# Create main window
+root = tk.Tk()
+root.title("Canvas Basics - Drawing Shapes")
+root.geometry("600x500")
+root.configure(bg="#f0f0f0")
+
+# Create a canvas widget
+canvas = tk.Canvas(
+    root,
+    width=500,
+    height=400,
+    bg="white",
+    relief="solid",
+    bd=2
+)
+canvas.pack(pady=20)
+
+# Draw a rectangle
+# create_rectangle(x1, y1, x2, y2, options)
+rectangle = canvas.create_rectangle(
+    50, 50, 150, 100,
+    fill="lightblue",
+    outline="blue",
+    width=3
+)
+
+# Draw a circle (oval with equal width and height)
+circle = canvas.create_oval(
+    200, 50, 300, 150,
+    fill="lightgreen",
+    outline="darkgreen",
+    width=3
+)
+
+# Draw a line
+line = canvas.create_line(
+    350, 50, 450, 150,
+    fill="red",
+    width=5
+)
+
+# Draw another line with multiple points (creates connected lines)
+zigzag = canvas.create_line(
+    50, 200, 100, 150, 150, 200, 200, 150, 250, 200,
+    fill="purple",
+    width=4,
+    smooth=True  # Makes curved lines
+)
+
+# Draw text on canvas
+text = canvas.create_text(
+    350, 250,
+    text="Canvas Drawing!",
+    font=("Arial", 16, "bold"),
+    fill="darkblue"
+)
+
+# Draw a filled polygon (triangle)
+triangle = canvas.create_polygon(
+    300, 300, 350, 200, 400, 300,
+    fill="orange",
+    outline="darkorange",
+    width=2
+)
+
+# Draw an arc (part of a circle)
+arc = canvas.create_arc(
+    50, 250, 150, 350,
+    start=0,      # Start angle
+    extent=180,   # How many degrees to draw
+    fill="yellow",
+    outline="gold",
+    width=3
+)
+
+# Information label
+info_label = tk.Label(
+    root,
+    text="🎨 Basic shapes drawn on Canvas: Rectangle, Circle, Lines, Text, Triangle, and Arc",
+    font=("Arial", 11),
+    bg="#f0f0f0",
+    fg="#2c3e50",
+    wraplength=500
+)
+info_label.pack(pady=10)
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor1" class="live-editor" placeholder="Try changing colors, sizes, or adding new shapes to the canvas..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">💡 Understanding Canvas Coordinates</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Coordinate System:</strong> (0,0) is at the top-left corner of the canvas</li>
+            <li><strong>X-axis:</strong> Increases from left to right</li>
+            <li><strong>Y-axis:</strong> Increases from top to bottom (different from math!)</li>
+            <li><strong>Rectangle:</strong> <code>create_rectangle(x1, y1, x2, y2)</code> where (x1,y1) is top-left, (x2,y2) is bottom-right</li>
+            <li><strong>Circle:</strong> <code>create_oval(x1, y1, x2, y2)</code> fits inside the rectangle defined by these coordinates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Interactive Drawing -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+        Interactive Drawing with Mouse
+      </h2>
+      <p class="section-description">
+        Learn to capture mouse events and create interactive drawing applications that respond to user clicks and drags.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">interactive_drawing.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor2', 'code2')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor2')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code2">
+<pre><code>import tkinter as tk
+import random
+
+class InteractiveDrawing:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Interactive Drawing - Click and Drag")
+        self.root.geometry("700x600")
+        self.root.configure(bg="#2c3e50")
+        
+        # Drawing settings
+        self.current_tool = "brush"
+        self.current_color = "black"
+        self.brush_size = 3
+        
+        # Variables for drawing
+        self.old_x = None
+        self.old_y = None
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        # Title
+        title_label = tk.Label(
+            self.root,
+            text="🎨 Interactive Drawing Canvas",
+            font=("Arial", 18, "bold"),
+            bg="#2c3e50",
+            fg="white"
+        )
+        title_label.pack(pady=10)
+        
+        # Tool selection frame
+        tool_frame = tk.Frame(self.root, bg="#34495e", pady=10)
+        tool_frame.pack(fill="x", padx=20, pady=(0, 10))
+        
+        tk.Label(
+            tool_frame,
+            text="Drawing Tools:",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white"
+        ).pack(side="left", padx=(10, 20))
+        
+        # Tool buttons
+        tools = [
+            ("🖌️ Brush", "brush"),
+            ("🟦 Rectangle", "rectangle"),
+            ("⭕ Circle", "circle"),
+            ("📏 Line", "line")
+        ]
+        
+        for tool_name, tool_type in tools:
+            btn = tk.Button(
+                tool_frame,
+                text=tool_name,
+                command=lambda t=tool_type: self.set_tool(t),
+                font=("Arial", 10),
+                bg="#3498db" if tool_type == "brush" else "#95a5a6",
+                fg="white",
+                padx=15,
+                pady=5,
+                cursor="hand2"
+            )
+            btn.pack(side="left", padx=5)
+            setattr(self, f"{tool_type}_btn", btn)
+        
+        # Color selection frame
+        color_frame = tk.Frame(self.root, bg="#34495e", pady=10)
+        color_frame.pack(fill="x", padx=20, pady=(0, 10))
+        
+        tk.Label(
+            color_frame,
+            text="Colors:",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white"
+        ).pack(side="left", padx=(10, 20))
+        
+        # Color buttons
+        colors = ["black", "red", "blue", "green", "purple", "orange", "brown", "pink"]
+        for color in colors:
+            btn = tk.Button(
+                color_frame,
+                text="  ",
+                command=lambda c=color: self.set_color(c),
+                bg=color,
+                width=3,
+                height=1,
+                cursor="hand2",
+                relief="raised" if color == "black" else "flat",
+                bd=3
+            )
+            btn.pack(side="left", padx=2)
+            setattr(self, f"{color}_btn", btn)
+        
+        # Canvas
+        self.canvas = tk.Canvas(
+            self.root,
+            width=650,
+            height=400,
+            bg="white",
+            relief="solid",
+            bd=2
+        )
+        self.canvas.pack(padx=20, pady=(0, 10))
+        
+        # Bind mouse events
+        self.canvas.bind("<Button-1>", self.on_click)
+        self.canvas.bind("<B1-Motion>", self.on_drag)
+        self.canvas.bind("<ButtonRelease-1>", self.on_release)
+        
+        # Control buttons
+        control_frame = tk.Frame(self.root, bg="#2c3e50")
+        control_frame.pack(pady=10)
+        
+        tk.Button(
+            control_frame,
+            text="🗑️ Clear Canvas",
+            command=self.clear_canvas,
+            font=("Arial", 12, "bold"),
+            bg="#e74c3c",
+            fg="white",
+            padx=20,
+            pady=8,
+            cursor="hand2"
+        ).pack(side="left", padx=10)
+        
+        tk.Button(
+            control_frame,
+            text="🎲 Random Art",
+            command=self.create_random_art,
+            font=("Arial", 12, "bold"),
+            bg="#9b59b6",
+            fg="white",
+            padx=20,
+            pady=8,
+            cursor="hand2"
+        ).pack(side="left", padx=10)
+    
+    def set_tool(self, tool):
+        """Change the current drawing tool"""
+        self.current_tool = tool
+        
+        # Update button appearances
+        tools = ["brush", "rectangle", "circle", "line"]
+        for t in tools:
+            btn = getattr(self, f"{t}_btn")
+            btn.config(bg="#3498db" if t == tool else "#95a5a6")
+    
+    def set_color(self, color):
+        """Change the current drawing color"""
+        self.current_color = color
+        
+        # Update button appearances
+        colors = ["black", "red", "blue", "green", "purple", "orange", "brown", "pink"]
+        for c in colors:
+            btn = getattr(self, f"{c}_btn")
+            btn.config(relief="raised" if c == color else "flat", bd=3 if c == color else 1)
+    
+    def on_click(self, event):
+        """Handle mouse click events"""
+        self.old_x = event.x
+        self.old_y = event.y
+        
+        if self.current_tool == "brush":
+            # Start drawing with brush
+            self.canvas.create_oval(
+                event.x - self.brush_size,
+                event.y - self.brush_size,
+                event.x + self.brush_size,
+                event.y + self.brush_size,
+                fill=self.current_color,
+                outline=self.current_color
+            )
+    
+    def on_drag(self, event):
+        """Handle mouse drag events"""
+        if self.current_tool == "brush" and self.old_x and self.old_y:
+            # Draw line from old position to new position
+            self.canvas.create_line(
+                self.old_x, self.old_y, event.x, event.y,
+                fill=self.current_color,
+                width=self.brush_size * 2,
+                capstyle=tk.ROUND,
+                smooth=tk.TRUE
+            )
+            self.old_x = event.x
+            self.old_y = event.y
+    
+    def on_release(self, event):
+        """Handle mouse release events"""
+        if self.current_tool == "rectangle":
+            self.canvas.create_rectangle(
+                self.old_x, self.old_y, event.x, event.y,
+                outline=self.current_color,
+                width=3
+            )
+        elif self.current_tool == "circle":
+            self.canvas.create_oval(
+                self.old_x, self.old_y, event.x, event.y,
+                outline=self.current_color,
+                width=3
+            )
+        elif self.current_tool == "line":
+            self.canvas.create_line(
+                self.old_x, self.old_y, event.x, event.y,
+                fill=self.current_color,
+                width=3
+            )
+        
+        self.old_x = None
+        self.old_y = None
+    
+    def clear_canvas(self):
+        """Clear all drawings from the canvas"""
+        self.canvas.delete("all")
+    
+    def create_random_art(self):
+        """Generate random colorful art"""
+        colors = ["red", "blue", "green", "purple", "orange", "pink", "yellow", "cyan"]
+        
+        for _ in range(20):
+            x1, y1 = random.randint(0, 600), random.randint(0, 350)
+            x2, y2 = random.randint(0, 600), random.randint(0, 350)
+            color = random.choice(colors)
+            
+            shape_type = random.choice(["rectangle", "oval", "line"])
+            if shape_type == "rectangle":
+                self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
+            elif shape_type == "oval":
+                self.canvas.create_oval(x1, y1, x2, y2, fill=color, outline="black")
+            else:
+                self.canvas.create_line(x1, y1, x2, y2, fill=color, width=3)
+    
+    def run(self):
+        """Start the application"""
+        self.root.mainloop()
+
+# Create and run the application
+if __name__ == "__main__":
+    app = InteractiveDrawing()
+    app.run()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor2" class="live-editor" placeholder="Try adding new tools like a spray brush, or different shape fills..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🎯 Mouse Event Handling</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>&lt;Button-1&gt;:</strong> Left mouse button clicked</li>
+            <li><strong>&lt;B1-Motion&gt;:</strong> Mouse moved while left button is held down</li>
+            <li><strong>&lt;ButtonRelease-1&gt;:</strong> Left mouse button released</li>
+            <li><strong>event.x, event.y:</strong> Mouse coordinates when event occurred</li>
+            <li><strong>Smooth Drawing:</strong> Connect mouse positions with lines for continuous strokes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Complete Drawing Application -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+        Digital Drawing Pad Application
+      </h2>
+      <p class="section-description">
+        Build a complete digital drawing application with advanced features like brush sizes, fill options, and save functionality.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">digital_drawing_pad.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor3', 'code3')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor3')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code3">
+<pre><code>import tkinter as tk
+from tkinter import ttk, colorchooser, messagebox, filedialog
+import random
+
+class DigitalDrawingPad:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Digital Drawing Pad - Professional Art Tool")
+        self.root.geometry("900x700")
+        self.root.configure(bg="#2c3e50")
+        
+        # Drawing settings
+        self.current_tool = "brush"
+        self.current_color = "black"
+        self.fill_color = "white"
+        self.brush_size = 5
+        self.is_filled = False
+        
+        # Drawing state
+        self.old_x = None
+        self.old_y = None
+        self.shapes = []  # Store drawn shapes for undo
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        # Title
+        title_frame = tk.Frame(self.root, bg="#34495e", height=60)
+        title_frame.pack(fill="x")
+        title_frame.pack_propagate(False)
+        
+        tk.Label(
+            title_frame,
+            text="🎨 Digital Drawing Pad",
+            font=("Arial", 20, "bold"),
+            bg="#34495e",
+            fg="white"
+        ).pack(expand=True)
+        
+        # Main content frame
+        content_frame = tk.Frame(self.root, bg="#2c3e50")
+        content_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        # Left panel for tools
+        tool_panel = tk.Frame(content_frame, bg="#34495e", width=200)
+        tool_panel.pack(side="left", fill="y", padx=(0, 10))
+        tool_panel.pack_propagate(False)
+        
+        # Canvas frame
+        canvas_frame = tk.Frame(content_frame, bg="#ecf0f1", relief="solid", bd=2)
+        canvas_frame.pack(side="right", fill="both", expand=True)
+        
+        self.setup_tool_panel(tool_panel)
+        self.setup_canvas(canvas_frame)
+        
+    def setup_tool_panel(self, parent):
+        # Tools section
+        tools_frame = tk.LabelFrame(
+            parent,
+            text="Drawing Tools",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white",
+            padx=10,
+            pady=10
+        )
+        tools_frame.pack(fill="x", padx=10, pady=10)
+        
+        tools = [
+            ("🖌️ Brush", "brush"),
+            ("✏️ Pencil", "pencil"),
+            ("🟦 Rectangle", "rectangle"),
+            ("⭕ Circle", "circle"),
+            ("📏 Line", "line"),
+            ("🔺 Triangle", "triangle"),
+            ("⭐ Star", "star")
+        ]
+        
+        for i, (tool_name, tool_type) in enumerate(tools):
+            btn = tk.Button(
+                tools_frame,
+                text=tool_name,
+                command=lambda t=tool_type: self.set_tool(t),
+                font=("Arial", 10),
+                bg="#3498db" if tool_type == "brush" else "#95a5a6",
+                fg="white",
+                width=15,
+                pady=5,
+                cursor="hand2"
+            )
+            btn.grid(row=i, column=0, pady=2, sticky="ew")
+            setattr(self, f"{tool_type}_btn", btn)
+        
+        # Colors section
+        colors_frame = tk.LabelFrame(
+            parent,
+            text="Colors",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white",
+            padx=10,
+            pady=10
+        )
+        colors_frame.pack(fill="x", padx=10, pady=10)
+        
+        # Quick color buttons
+        quick_colors = [
+            ("black", "Black"), ("red", "Red"), ("blue", "Blue"), ("green", "Green"),
+            ("purple", "Purple"), ("orange", "Orange"), ("brown", "Brown"), ("pink", "Pink")
+        ]
+        
+        for i, (color, name) in enumerate(quick_colors):
+            btn = tk.Button(
+                colors_frame,
+                text="  ",
+                command=lambda c=color: self.set_color(c),
+                bg=color,
+                width=4,
+                height=1,
+                cursor="hand2",
+                relief="raised" if color == "black" else "flat",
+                bd=2
+            )
+            btn.grid(row=i//4, column=i%4, padx=2, pady=2)
+            setattr(self, f"{color}_btn", btn)
+        
+        # Custom color picker
+        tk.Button(
+            colors_frame,
+            text="🎨 Custom Color",
+            command=self.choose_custom_color,
+            font=("Arial", 10),
+            bg="#e67e22",
+            fg="white",
+            width=15,
+            pady=5,
+            cursor="hand2"
+        ).grid(row=2, column=0, columnspan=4, pady=(5, 0), sticky="ew")
+        
+        # Settings section
+        settings_frame = tk.LabelFrame(
+            parent,
+            text="Settings",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white",
+            padx=10,
+            pady=10
+        )
+        settings_frame.pack(fill="x", padx=10, pady=10)
+        
+        # Brush size
+        tk.Label(
+            settings_frame,
+            text="Brush Size:",
+            font=("Arial", 10),
+            bg="#34495e",
+            fg="white"
+        ).grid(row=0, column=0, sticky="w", pady=2)
+        
+        self.size_var = tk.IntVar(value=5)
+        size_scale = tk.Scale(
+            settings_frame,
+            from_=1,
+            to=20,
+            orient="horizontal",
+            variable=self.size_var,
+            command=self.update_brush_size,
+            bg="#34495e",
+            fg="white",
+            highlightbackground="#34495e"
+        )
+        size_scale.grid(row=1, column=0, sticky="ew", pady=2)
+        
+        # Fill option
+        self.fill_var = tk.BooleanVar()
+        fill_check = tk.Checkbutton(
+            settings_frame,
+            text="Fill Shapes",
+            variable=self.fill_var,
+            command=self.toggle_fill,
+            font=("Arial", 10),
+            bg="#34495e",
+            fg="white",
+            selectcolor="#2c3e50",
+            cursor="hand2"
+        )
+        fill_check.grid(row=2, column=0, sticky="w", pady=5)
+        
+        # Actions section
+        actions_frame = tk.LabelFrame(
+            parent,
+            text="Actions",
+            font=("Arial", 12, "bold"),
+            bg="#34495e",
+            fg="white",
+            padx=10,
+            pady=10
+        )
+        actions_frame.pack(fill="x", padx=10, pady=10)
+        
+        actions = [
+            ("🗑️ Clear", self.clear_canvas, "#e74c3c"),
+            ("↶ Undo", self.undo_last, "#f39c12"),
+            ("🎲 Random", self.create_random_art, "#9b59b6"),
+            ("💾 Save", self.save_drawing, "#27ae60")
+        ]
+        
+        for i, (text, command, color) in enumerate(actions):
+            tk.Button(
+                actions_frame,
+                text=text,
+                command=command,
+                font=("Arial", 10, "bold"),
+                bg=color,
+                fg="white",
+                width=15,
+                pady=5,
+                cursor="hand2"
+            ).grid(row=i, column=0, pady=2, sticky="ew")
+        
+    def setup_canvas(self, parent):
+        # Canvas with scrollbars
+        canvas_container = tk.Frame(parent, bg="#ecf0f1")
+        canvas_container.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        self.canvas = tk.Canvas(
+            canvas_container,
+            width=650,
+            height=500,
+            bg="white",
+            relief="solid",
+            bd=2,
+            scrollregion=(0, 0, 1000, 1000)
+        )
+        
+        # Scrollbars
+        v_scrollbar = tk.Scrollbar(canvas_container, orient="vertical", command=self.canvas.yview)
+        h_scrollbar = tk.Scrollbar(canvas_container, orient="horizontal", command=self.canvas.xview)
+        self.canvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
+        
+        # Pack scrollbars and canvas
+        v_scrollbar.pack(side="right", fill="y")
+        h_scrollbar.pack(side="bottom", fill="x")
+        self.canvas.pack(side="left", fill="both", expand=True)
+        
+        # Bind mouse events
+        self.canvas.bind("<Button-1>", self.on_click)
+        self.canvas.bind("<B1-Motion>", self.on_drag)
+        self.canvas.bind("<ButtonRelease-1>", self.on_release)
+        
+        # Status bar
+        status_frame = tk.Frame(parent, bg="#34495e", height=30)
+        status_frame.pack(fill="x", side="bottom")
+        status_frame.pack_propagate(False)
+        
+        self.status_label = tk.Label(
+            status_frame,
+            text="Ready to draw! Select a tool and start creating.",
+            font=("Arial", 10),
+            bg="#34495e",
+            fg="white"
+        )
+        self.status_label.pack(expand=True)
+    
+    def set_tool(self, tool):
+        """Change the current drawing tool"""
+        self.current_tool = tool
+        self.status_label.config(text=f"Selected tool: {tool.capitalize()}")
+        
+        # Update button appearances
+        tools = ["brush", "pencil", "rectangle", "circle", "line", "triangle", "star"]
+        for t in tools:
+            if hasattr(self, f"{t}_btn"):
+                btn = getattr(self, f"{t}_btn")
+                btn.config(bg="#3498db" if t == tool else "#95a5a6")
+    
+    def set_color(self, color):
+        """Change the current drawing color"""
+        self.current_color = color
+        self.status_label.config(text=f"Selected color: {color.capitalize()}")
+        
+        # Update button appearances
+        colors = ["black", "red", "blue", "green", "purple", "orange", "brown", "pink"]
+        for c in colors:
+            if hasattr(self, f"{c}_btn"):
+                btn = getattr(self, f"{c}_btn")
+                btn.config(relief="raised" if c == color else "flat", bd=2 if c == color else 1)
+    
+    def choose_custom_color(self):
+        """Open color picker for custom colors"""
+        color = colorchooser.askcolor(title="Choose Color")[1]
+        if color:
+            self.set_color(color)
+    
+    def update_brush_size(self, value):
+        """Update brush size from scale"""
+        self.brush_size = int(value)
+        self.status_label.config(text=f"Brush size: {self.brush_size}")
+    
+    def toggle_fill(self):
+        """Toggle fill option for shapes"""
+        self.is_filled = self.fill_var.get()
+        status = "enabled" if self.is_filled else "disabled"
+        self.status_label.config(text=f"Shape fill {status}")
+    
+    def on_click(self, event):
+        """Handle mouse click events"""
+        self.old_x = event.x
+        self.old_y = event.y
+        
+        if self.current_tool in ["brush", "pencil"]:
+            size = self.brush_size if self.current_tool == "brush" else 2
+            shape_id = self.canvas.create_oval(
+                event.x - size//2,
+                event.y - size//2,
+                event.x + size//2,
+                event.y + size//2,
+                fill=self.current_color,
+                outline=self.current_color
+            )
+            self.shapes.append(shape_id)
+    
+    def on_drag(self, event):
+        """Handle mouse drag events"""
+        if self.current_tool in ["brush", "pencil"] and self.old_x and self.old_y:
+            size = self.brush_size if self.current_tool == "brush" else 2
+            shape_id = self.canvas.create_line(
+                self.old_x, self.old_y, event.x, event.y,
+                fill=self.current_color,
+                width=size,
+                capstyle=tk.ROUND,
+                smooth=tk.TRUE
+            )
+            self.shapes.append(shape_id)
+            self.old_x = event.x
+            self.old_y = event.y
+    
+    def on_release(self, event):
+        """Handle mouse release events"""
+        if self.old_x is None or self.old_y is None:
+            return
+            
+        fill_color = self.current_color if self.is_filled else ""
+        
+        if self.current_tool == "rectangle":
+            shape_id = self.canvas.create_rectangle(
+                self.old_x, self.old_y, event.x, event.y,
+                outline=self.current_color,
+                fill=fill_color,
+                width=self.brush_size
+            )
+            self.shapes.append(shape_id)
+            
+        elif self.current_tool == "circle":
+            shape_id = self.canvas.create_oval(
+                self.old_x, self.old_y, event.x, event.y,
+                outline=self.current_color,
+                fill=fill_color,
+                width=self.brush_size
+            )
+            self.shapes.append(shape_id)
+            
+        elif self.current_tool == "line":
+            shape_id = self.canvas.create_line(
+                self.old_x, self.old_y, event.x, event.y,
+                fill=self.current_color,
+                width=self.brush_size
+            )
+            self.shapes.append(shape_id)
+            
+        elif self.current_tool == "triangle":
+            mid_x = (self.old_x + event.x) // 2
+            shape_id = self.canvas.create_polygon(
+                mid_x, self.old_y,
+                self.old_x, event.y,
+                event.x, event.y,
+                outline=self.current_color,
+                fill=fill_color,
+                width=self.brush_size
+            )
+            self.shapes.append(shape_id)
+            
+        elif self.current_tool == "star":
+            self.draw_star(self.old_x, self.old_y, event.x, event.y)
+        
+        self.old_x = None
+        self.old_y = None
+    
+    def draw_star(self, x1, y1, x2, y2):
+        """Draw a star shape"""
+        center_x = (x1 + x2) // 2
+        center_y = (y1 + y2) // 2
+        radius = min(abs(x2 - x1), abs(y2 - y1)) // 2
+        
+        points = []
+        for i in range(10):
+            angle = i * 36 * 3.14159 / 180
+            if i % 2 == 0:
+                r = radius
+            else:
+                r = radius // 2
+            x = center_x + r * math.cos(angle - 3.14159/2)
+            y = center_y + r * math.sin(angle - 3.14159/2)
+            points.extend([x, y])
+        
+        fill_color = self.current_color if self.is_filled else ""
+        shape_id = self.canvas.create_polygon(
+            points,
+            outline=self.current_color,
+            fill=fill_color,
+            width=self.brush_size
+        )
+        self.shapes.append(shape_id)
+    
+    def clear_canvas(self):
+        """Clear all drawings"""
+        self.canvas.delete("all")
+        self.shapes.clear()
+        self.status_label.config(text="Canvas cleared!")
+    
+    def undo_last(self):
+        """Remove the last drawn shape"""
+        if self.shapes:
+            last_shape = self.shapes.pop()
+            self.canvas.delete(last_shape)
+            self.status_label.config(text="Last action undone")
+        else:
+            self.status_label.config(text="Nothing to undo")
+    
+    def create_random_art(self):
+        """Generate random colorful art"""
+        colors = ["red", "blue", "green", "purple", "orange", "pink", "yellow", "cyan", "magenta"]
+        shapes = ["rectangle", "oval", "line"]
+        
+        for _ in range(15):
+            x1, y1 = random.randint(0, 600), random.randint(0, 450)
+            x2, y2 = random.randint(0, 600), random.randint(0, 450)
+            color = random.choice(colors)
+            shape_type = random.choice(shapes)
+            
+            if shape_type == "rectangle":
+                shape_id = self.canvas.create_rectangle(
+                    x1, y1, x2, y2,
+                    fill=color,
+                    outline="black",
+                    width=2
+                )
+            elif shape_type == "oval":
+                shape_id = self.canvas.create_oval(
+                    x1, y1, x2, y2,
+                    fill=color,
+                    outline="black",
+                    width=2
+                )
+            else:
+                shape_id = self.canvas.create_line(
+                    x1, y1, x2, y2,
+                    fill=color,
+                    width=random.randint(2, 8)
+                )
+            self.shapes.append(shape_id)
+        
+        self.status_label.config(text="Random art generated!")
+    
+    def save_drawing(self):
+        """Save the drawing (simplified version)"""
+        messagebox.showinfo(
+            "Save Drawing",
+            "In a full application, this would save your drawing to a file!\n\n"
+            "For now, you can take a screenshot of your artwork."
+        )
+        self.status_label.config(text="Drawing saved!")
+    
+    def run(self):
+        """Start the application"""
+        self.root.mainloop()
+
+# Import math for star drawing
+import math
+
+# Create and run the application
+if __name__ == "__main__":
+    app = DigitalDrawingPad()
+    app.run()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor3" class="live-editor" placeholder="This is your complete drawing pad! Try adding new features like layers, gradients, or text tools..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🚀 Professional Features Implemented</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Multiple Tools:</strong> Brush, pencil, shapes, and custom drawing tools</li>
+            <li><strong>Color System:</strong> Quick colors and custom color picker</li>
+            <li><strong>Brush Settings:</strong> Adjustable size and fill options</li>
+            <li><strong>User Interface:</strong> Professional tool panels and status updates</li>
+            <li><strong>Interactive Features:</strong> Undo functionality and random art generation</li>
+            <li><strong>Advanced Shapes:</strong> Stars, triangles, and custom polygons</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="challenge-box">
+        <div class="challenge-title">🎯 Advanced Drawing Challenges</div>
+        <div class="tip-content">
+          Enhance your drawing application with these features:
+          <ul>
+            <li><strong>Layers System:</strong> Multiple drawing layers with opacity control</li>
+            <li><strong>Gradient Tools:</strong> Linear and radial gradient fills</li>
+            <li><strong>Text Tool:</strong> Add text with font selection and sizing</li>
+            <li><strong>Image Import:</strong> Load and edit existing images</li>
+            <li><strong>Filter Effects:</strong> Blur, brightness, and color filters</li>
+            <li><strong>Animation:</strong> Create simple animations with frame sequences</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+      <h2 style="color: white; margin-bottom: 1rem;">🎊 Artistic Achievement Unlocked!</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+        You've mastered Canvas graphics and built a complete digital drawing application!
+      </p>
+      <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <h3 style="margin-bottom: 1rem;">✅ Canvas Skills You've Mastered:</h3>
+        <ul style="text-align: left; display: inline-block;">
+          <li>Creating and configuring Canvas widgets for graphics</li>
+          <li>Drawing shapes, lines, and complex patterns programmatically</li>
+          <li>Handling mouse events for interactive drawing applications</li>
+          <li>Working with colors, fills, and visual styling</li>
+          <li>Building complete drawing tools with professional interfaces</li>
+          <li>Implementing advanced features like undo and custom shapes</li>
+        </ul>
+      </div>
+      <p style="font-size: 1.1rem; margin-top: 1.5rem;">
+        <strong>Next Adventure:</strong> Session 4 will explore advanced widgets, menus, and file operations! 🚀
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function copyToEditor(editorId, codeId) {
+      const textarea = document.getElementById(editorId);
+      const codeBlock = document.getElementById(codeId);
+      if (textarea && codeBlock) {
+        const code = codeBlock.innerText.trim();
+        textarea.value = code;
+        textarea.focus();
+        textarea.select();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(code).then(() => {
+          // Visual feedback
+          const btn = event.target;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '✅ Copied!';
+          btn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+          
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          }, 2000);
+        }).catch(() => {
+          // Fallback for older browsers
+          textarea.select();
+          document.execCommand('copy');
+        });
+      }
+    }
+
+    function runOnline(editorId) {
+      const textarea = document.getElementById(editorId);
+      if (textarea && textarea.value.trim()) {
+        const code = textarea.value;
+        const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+        window.open(url, '_blank');
+      } else {
+        // If editor is empty, use the example code
+        const codeId = editorId.replace('editor', 'code');
+        const codeBlock = document.getElementById(codeId);
+        if (codeBlock) {
+          const code = codeBlock.innerText.trim();
+          const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+          window.open(url, '_blank');
+        }
+      }
+    }
+
+    // Auto-focus first editor when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstEditor = document.getElementById('editor1');
+      if (firstEditor) {
+        firstEditor.focus();
+      }
+    });
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

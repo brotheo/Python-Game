@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 2: Building Simple Apps - Python GUI Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .lesson-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .lesson-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .lesson-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .lesson-subtitle {
+      font-size: 1.2rem;
+      color: #6c757d;
+      font-weight: 400;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      padding: 2rem;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-learn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-concepts { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .card-goal { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-content {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .card-content ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card-content li {
+      margin-bottom: 0.7rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .card-content li::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 15px;
+      padding: 2.5rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border-left: 5px solid #667eea;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      color: #5a6c7d;
+      margin-bottom: 1.5rem;
+    }
+
+    .code-container {
+      background: #1e1e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-header {
+      background: #2d2d3f;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3c3c54;
+    }
+
+    .code-title {
+      color: #a6adc8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .code-editor {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .code-editor code {
+      color: #cdd6f4;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .run-btn {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    .run-btn:hover {
+      box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+    }
+
+    .live-editor {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 2px solid #e1e8ed;
+      background: #f8fafc;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .live-editor:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 4px solid #667eea;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-content {
+      color: #424242;
+      line-height: 1.7;
+    }
+
+    .tip-content ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .tip-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+      border-left: 4px solid #ff7043;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .challenge-title {
+      font-weight: 600;
+      color: #d84315;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .progress-step.completed {
+      background: #28a745;
+    }
+
+    .progress-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 60px;
+      height: 2px;
+      background: #dee2e6;
+      transform: translateY(-50%);
+    }
+
+    .progress-step:last-child::after {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .lesson-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .lesson-title {
+        font-size: 2rem;
+      }
+      
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 1.5rem;
+      }
+      
+      .code-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <!-- Header Section -->
+    <div class="lesson-header">
+      <h1 class="lesson-title">Session 2: Building Simple Apps</h1>
+      <p class="lesson-subtitle">Master User Input, Functions, and Data Processing</p>
+      <p style="font-size: 1rem; opacity: 0.8; margin-top: 0.5rem;">Created by Teacher Theo</p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-step completed">1</div>
+      <div class="progress-step completed">2</div>
+      <div class="progress-step">3</div>
+      <div class="progress-step">4</div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+      <div class="info-card card-learn">
+        <div class="card-title">🎯 What You'll Learn</div>
+        <div class="card-content">
+          <ul>
+            <li>Capture and process user input effectively</li>
+            <li>Build functions that work with GUI elements</li>
+            <li>Display calculated results dynamically</li>
+            <li>Handle different data types and validation</li>
+            <li>Create practical, useful applications</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-concepts">
+        <div class="card-title">🔧 Key Concepts</div>
+        <div class="card-content">
+          <ul>
+            <li><strong>Entry Widget:</strong> Text input fields for user data</li>
+            <li><strong>.get() Method:</strong> Retrieving values from input fields</li>
+            <li><strong>Event Handling:</strong> Responding to button clicks and key presses</li>
+            <li><strong>StringVar():</strong> Dynamic text variables for real-time updates</li>
+            <li><strong>Data Validation:</strong> Ensuring user input is correct</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card card-goal">
+        <div class="card-title">🚀 Project Goal</div>
+        <div class="card-content">
+          Build a complete calculator application featuring:
+          <ul>
+            <li>Multiple number input fields</li>
+            <li>Real-time calculation results</li>
+            <li>Error handling for invalid input</li>
+            <li>Professional calculator interface</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic User Input -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+        Capturing User Input
+      </h2>
+      <p class="section-description">
+        Learn how to get text from the user using Entry widgets and the .get() method to retrieve values.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">user_input_demo.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor1', 'code1')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor1')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code1">
+<pre><code>import tkinter as tk
+
+def show_input():
+    """Get text from entry field and display it"""
+    user_text = entry.get()  # Get the text from entry widget
+    
+    if user_text.strip():  # Check if not empty
+        result_label.config(
+            text=f"You entered: '{user_text}'",
+            fg="#27ae60"
+        )
+    else:
+        result_label.config(
+            text="Please enter some text first!",
+            fg="#e74c3c"
+        )
+
+def clear_input():
+    """Clear the entry field and result"""
+    entry.delete(0, tk.END)  # Clear from position 0 to END
+    result_label.config(text="Enter text above and click 'Show Input'")
+    entry.focus()  # Put cursor back in entry field
+
+# Create main window
+root = tk.Tk()
+root.title("User Input Demo")
+root.geometry("500x300")
+root.configure(bg="#ecf0f1")
+
+# Title
+title_label = tk.Label(
+    root,
+    text="📝 User Input Demonstration",
+    font=("Arial", 18, "bold"),
+    bg="#ecf0f1",
+    fg="#2c3e50"
+)
+title_label.pack(pady=20)
+
+# Instructions
+instructions = tk.Label(
+    root,
+    text="Type something in the box below:",
+    font=("Arial", 12),
+    bg="#ecf0f1",
+    fg="#34495e"
+)
+instructions.pack(pady=10)
+
+# Entry widget for user input
+entry = tk.Entry(
+    root,
+    font=("Arial", 14),
+    width=30,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+entry.pack(pady=15)
+entry.bind('<Return>', lambda e: show_input())  # Enter key support
+
+# Buttons
+button_frame = tk.Frame(root, bg="#ecf0f1")
+button_frame.pack(pady=20)
+
+show_button = tk.Button(
+    button_frame,
+    text="Show Input",
+    command=show_input,
+    font=("Arial", 12, "bold"),
+    bg="#3498db",
+    fg="white",
+    padx=20,
+    pady=8,
+    cursor="hand2"
+)
+show_button.pack(side=tk.LEFT, padx=10)
+
+clear_button = tk.Button(
+    button_frame,
+    text="Clear",
+    command=clear_input,
+    font=("Arial", 12, "bold"),
+    bg="#e74c3c",
+    fg="white",
+    padx=20,
+    pady=8,
+    cursor="hand2"
+)
+clear_button.pack(side=tk.LEFT, padx=10)
+
+# Result display
+result_label = tk.Label(
+    root,
+    text="Enter text above and click 'Show Input'",
+    font=("Arial", 12),
+    bg="#ecf0f1",
+    fg="#7f8c8d",
+    wraplength=400
+)
+result_label.pack(pady=20)
+
+# Set initial focus
+entry.focus()
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor1" class="live-editor" placeholder="Try modifying the placeholder text, button colors, or add new functionality..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">💡 Understanding User Input</div>
+        <div class="tip-content">
+          <ul>
+            <li><code>tk.Entry()</code> creates a text input field where users can type</li>
+            <li><code>.get()</code> retrieves the current text from the entry widget</li>
+            <li><code>.delete(0, tk.END)</code> clears all text from the entry field</li>
+            <li><code>.focus()</code> places the cursor in the entry field automatically</li>
+            <li><code>.bind('<Return>', function)</code> allows Enter key to trigger actions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Working with Numbers -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+        Processing Numbers and Math
+      </h2>
+      <p class="section-description">
+        Learn how to convert text input to numbers, perform calculations, and handle errors gracefully.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">number_processor.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor2', 'code2')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor2')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code2">
+<pre><code>import tkinter as tk
+
+def add_numbers():
+    """Add two numbers with error handling"""
+    try:
+        # Get text from both entry fields
+        num1_text = entry1.get()
+        num2_text = entry2.get()
+        
+        # Convert to numbers (this might cause an error)
+        number1 = float(num1_text)
+        number2 = float(num2_text)
+        
+        # Perform the calculation
+        result = number1 + number2
+        
+        # Display the result
+        result_label.config(
+            text=f"{number1} + {number2} = {result}",
+            fg="#27ae60"
+        )
+        
+    except ValueError:
+        # Handle the case where input isn't a valid number
+        result_label.config(
+            text="❌ Please enter valid numbers only!",
+            fg="#e74c3c"
+        )
+
+def clear_all():
+    """Clear all input fields and result"""
+    entry1.delete(0, tk.END)
+    entry2.delete(0, tk.END)
+    result_label.config(
+        text="Enter two numbers and click 'Add'",
+        fg="#7f8c8d"
+    )
+    entry1.focus()
+
+# Create main window
+root = tk.Tk()
+root.title("Number Addition App")
+root.geometry("450x350")
+root.configure(bg="#f8f9fa")
+
+# Title
+title_label = tk.Label(
+    root,
+    text="🔢 Simple Number Adder",
+    font=("Arial", 20, "bold"),
+    bg="#f8f9fa",
+    fg="#2c3e50"
+)
+title_label.pack(pady=20)
+
+# Input section
+input_frame = tk.Frame(root, bg="#f8f9fa")
+input_frame.pack(pady=20)
+
+# First number
+tk.Label(
+    input_frame,
+    text="First Number:",
+    font=("Arial", 12),
+    bg="#f8f9fa",
+    fg="#34495e"
+).grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
+entry1 = tk.Entry(
+    input_frame,
+    font=("Arial", 12),
+    width=15,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+entry1.grid(row=0, column=1, padx=10, pady=10)
+
+# Second number
+tk.Label(
+    input_frame,
+    text="Second Number:",
+    font=("Arial", 12),
+    bg="#f8f9fa",
+    fg="#34495e"
+).grid(row=1, column=0, padx=10, pady=10, sticky="e")
+
+entry2 = tk.Entry(
+    input_frame,
+    font=("Arial", 12),
+    width=15,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+entry2.grid(row=1, column=1, padx=10, pady=10)
+
+# Buttons
+button_frame = tk.Frame(root, bg="#f8f9fa")
+button_frame.pack(pady=20)
+
+add_button = tk.Button(
+    button_frame,
+    text="➕ Add Numbers",
+    command=add_numbers,
+    font=("Arial", 12, "bold"),
+    bg="#3498db",
+    fg="white",
+    padx=25,
+    pady=10,
+    cursor="hand2"
+)
+add_button.pack(side=tk.LEFT, padx=10)
+
+clear_button = tk.Button(
+    button_frame,
+    text="🔄 Clear",
+    command=clear_all,
+    font=("Arial", 12, "bold"),
+    bg="#e74c3c",
+    fg="white",
+    padx=25,
+    pady=10,
+    cursor="hand2"
+)
+clear_button.pack(side=tk.LEFT, padx=10)
+
+# Result display
+result_label = tk.Label(
+    root,
+    text="Enter two numbers and click 'Add'",
+    font=("Arial", 14, "bold"),
+    bg="#f8f9fa",
+    fg="#7f8c8d",
+    wraplength=400
+)
+result_label.pack(pady=30)
+
+# Keyboard shortcuts
+entry1.bind('<Return>', lambda e: entry2.focus())  # Tab to next field
+entry2.bind('<Return>', lambda e: add_numbers())   # Enter to calculate
+
+# Set initial focus
+entry1.focus()
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor2" class="live-editor" placeholder="Try adding different operations like subtraction, multiplication, or division..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🎯 Key Programming Concepts</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Type Conversion:</strong> <code>float()</code> converts text to decimal numbers</li>
+            <li><strong>Error Handling:</strong> <code>try/except</code> catches and handles invalid input</li>
+            <li><strong>Grid Layout:</strong> <code>.grid()</code> organizes widgets in rows and columns</li>
+            <li><strong>String Formatting:</strong> f-strings create dynamic text with variables</li>
+            <li><strong>User Experience:</strong> Enter key navigation and automatic focus</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Complete Calculator -->
+    <div class="section">
+      <h2 class="section-title">
+        <span style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+        Building a Complete Calculator
+      </h2>
+      <p class="section-description">
+        Create a professional calculator with multiple operations, advanced features, and a polished interface.
+      </p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">simple_calculator.py</span>
+          <div class="code-actions">
+            <button class="action-btn" onclick="copyToEditor('editor3', 'code3')">
+              📋 Copy Code
+            </button>
+            <button class="action-btn run-btn" onclick="runOnline('editor3')">
+              ▶ Run Online
+            </button>
+          </div>
+        </div>
+        <div class="code-editor" id="code3">
+<pre><code>import tkinter as tk
+from tkinter import messagebox
+
+def calculate(operation):
+    """Perform calculation based on operation type"""
+    try:
+        # Get numbers from entry fields
+        num1 = float(entry1.get())
+        num2 = float(entry2.get())
+        
+        # Perform the requested operation
+        if operation == "add":
+            result = num1 + num2
+            symbol = "+"
+        elif operation == "subtract":
+            result = num1 - num2
+            symbol = "-"
+        elif operation == "multiply":
+            result = num1 * num2
+            symbol = "×"
+        elif operation == "divide":
+            if num2 == 0:
+                result_label.config(
+                    text="❌ Cannot divide by zero!",
+                    fg="#e74c3c"
+                )
+                return
+            result = num1 / num2
+            symbol = "÷"
+        
+        # Format result nicely
+        if result == int(result):
+            result_text = f"{num1:g} {symbol} {num2:g} = {int(result)}"
+        else:
+            result_text = f"{num1:g} {symbol} {num2:g} = {result:.2f}"
+        
+        result_label.config(text=result_text, fg="#27ae60")
+        
+        # Update calculation history
+        add_to_history(result_text)
+        
+    except ValueError:
+        result_label.config(
+            text="❌ Please enter valid numbers!",
+            fg="#e74c3c"
+        )
+
+def add_to_history(calculation):
+    """Add calculation to history list"""
+    history_listbox.insert(0, calculation)  # Add to top
+    if history_listbox.size() > 10:  # Keep only last 10
+        history_listbox.delete(10)
+
+def clear_all():
+    """Clear all fields and results"""
+    entry1.delete(0, tk.END)
+    entry2.delete(0, tk.END)
+    result_label.config(
+        text="Enter numbers and choose an operation",
+        fg="#7f8c8d"
+    )
+    entry1.focus()
+
+def clear_history():
+    """Clear calculation history"""
+    history_listbox.delete(0, tk.END)
+
+# Create main window
+root = tk.Tk()
+root.title("Simple Calculator - Python GUI")
+root.geometry("600x550")
+root.configure(bg="#2c3e50")
+
+# Main frame
+main_frame = tk.Frame(root, bg="#ecf0f1", padx=30, pady=20)
+main_frame.pack(expand=True, fill="both", padx=20, pady=20)
+
+# Title
+title_label = tk.Label(
+    main_frame,
+    text="🧮 Simple Calculator",
+    font=("Arial", 24, "bold"),
+    bg="#ecf0f1",
+    fg="#2c3e50"
+)
+title_label.pack(pady=(0, 20))
+
+# Input section
+input_frame = tk.LabelFrame(
+    main_frame,
+    text="Enter Numbers",
+    font=("Arial", 12, "bold"),
+    bg="#ecf0f1",
+    fg="#34495e",
+    padx=20,
+    pady=15
+)
+input_frame.pack(fill="x", pady=(0, 20))
+
+# Number inputs
+numbers_frame = tk.Frame(input_frame, bg="#ecf0f1")
+numbers_frame.pack()
+
+tk.Label(
+    numbers_frame,
+    text="First Number:",
+    font=("Arial", 12),
+    bg="#ecf0f1"
+).grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
+entry1 = tk.Entry(
+    numbers_frame,
+    font=("Arial", 14),
+    width=15,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+entry1.grid(row=0, column=1, padx=10, pady=10)
+
+tk.Label(
+    numbers_frame,
+    text="Second Number:",
+    font=("Arial", 12),
+    bg="#ecf0f1"
+).grid(row=1, column=0, padx=10, pady=10, sticky="e")
+
+entry2 = tk.Entry(
+    numbers_frame,
+    font=("Arial", 14),
+    width=15,
+    relief="solid",
+    bd=2,
+    justify="center"
+)
+entry2.grid(row=1, column=1, padx=10, pady=10)
+
+# Operations section
+operations_frame = tk.LabelFrame(
+    main_frame,
+    text="Choose Operation",
+    font=("Arial", 12, "bold"),
+    bg="#ecf0f1",
+    fg="#34495e",
+    padx=20,
+    pady=15
+)
+operations_frame.pack(fill="x", pady=(0, 20))
+
+buttons_frame = tk.Frame(operations_frame, bg="#ecf0f1")
+buttons_frame.pack()
+
+# Operation buttons
+tk.Button(
+    buttons_frame,
+    text="➕ Add",
+    command=lambda: calculate("add"),
+    font=("Arial", 11, "bold"),
+    bg="#3498db",
+    fg="white",
+    padx=15,
+    pady=8,
+    cursor="hand2"
+).grid(row=0, column=0, padx=5, pady=5)
+
+tk.Button(
+    buttons_frame,
+    text="➖ Subtract",
+    command=lambda: calculate("subtract"),
+    font=("Arial", 11, "bold"),
+    bg="#e67e22",
+    fg="white",
+    padx=15,
+    pady=8,
+    cursor="hand2"
+).grid(row=0, column=1, padx=5, pady=5)
+
+tk.Button(
+    buttons_frame,
+    text="✖️ Multiply",
+    command=lambda: calculate("multiply"),
+    font=("Arial", 11, "bold"),
+    bg="#9b59b6",
+    fg="white",
+    padx=15,
+    pady=8,
+    cursor="hand2"
+).grid(row=0, column=2, padx=5, pady=5)
+
+tk.Button(
+    buttons_frame,
+    text="➗ Divide",
+    command=lambda: calculate("divide"),
+    font=("Arial", 11, "bold"),
+    bg="#e74c3c",
+    fg="white",
+    padx=15,
+    pady=8,
+    cursor="hand2"
+).grid(row=0, column=3, padx=5, pady=5)
+
+# Utility buttons
+tk.Button(
+    buttons_frame,
+    text="🔄 Clear All",
+    command=clear_all,
+    font=("Arial", 11, "bold"),
+    bg="#95a5a6",
+    fg="white",
+    padx=15,
+    pady=8,
+    cursor="hand2"
+).grid(row=1, column=1, columnspan=2, padx=5, pady=10)
+
+# Result display
+result_label = tk.Label(
+    main_frame,
+    text="Enter numbers and choose an operation",
+    font=("Arial", 16, "bold"),
+    bg="#ecf0f1",
+    fg="#7f8c8d",
+    wraplength=500,
+    pady=20
+)
+result_label.pack()
+
+# History section
+history_frame = tk.LabelFrame(
+    main_frame,
+    text="Calculation History",
+    font=("Arial", 12, "bold"),
+    bg="#ecf0f1",
+    fg="#34495e",
+    padx=15,
+    pady=10
+)
+history_frame.pack(fill="both", expand=True, pady=(20, 0))
+
+# History listbox with scrollbar
+history_container = tk.Frame(history_frame, bg="#ecf0f1")
+history_container.pack(fill="both", expand=True)
+
+history_listbox = tk.Listbox(
+    history_container,
+    font=("Arial", 10),
+    height=6,
+    bg="white",
+    relief="solid",
+    bd=1
+)
+history_listbox.pack(side="left", fill="both", expand=True)
+
+scrollbar = tk.Scrollbar(history_container)
+scrollbar.pack(side="right", fill="y")
+history_listbox.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=history_listbox.yview)
+
+tk.Button(
+    history_frame,
+    text="Clear History",
+    command=clear_history,
+    font=("Arial", 9),
+    bg="#95a5a6",
+    fg="white",
+    padx=10,
+    pady=5,
+    cursor="hand2"
+).pack(pady=(10, 0))
+
+# Keyboard shortcuts
+entry1.bind('<Return>', lambda e: entry2.focus())
+entry2.bind('<Return>', lambda e: calculate("add"))
+
+# Set initial focus
+entry1.focus()
+
+root.mainloop()</code></pre>
+        </div>
+      </div>
+      
+      <textarea id="editor3" class="live-editor" placeholder="This is your complete calculator! Try adding features like square root, percentage, or memory functions..."></textarea>
+      
+      <div class="tip-box">
+        <div class="tip-title">🚀 Advanced Features Implemented</div>
+        <div class="tip-content">
+          <ul>
+            <li><strong>Multiple Operations:</strong> Addition, subtraction, multiplication, and division</li>
+            <li><strong>Error Prevention:</strong> Division by zero protection and input validation</li>
+            <li><strong>Calculation History:</strong> Keeps track of recent calculations with scrolling</li>
+            <li><strong>Professional Layout:</strong> LabelFrame groupings and organized sections</li>
+            <li><strong>Smart Formatting:</strong> Shows integers without decimals when appropriate</li>
+            <li><strong>Keyboard Navigation:</strong> Enter key moves between fields and calculates</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="challenge-box">
+        <div class="challenge-title">🎯 Calculator Enhancement Challenges</div>
+        <div class="tip-content">
+          Extend your calculator with these advanced features:
+          <ul>
+            <li><strong>Scientific Functions:</strong> Add square root, power, and percentage operations</li>
+            <li><strong>Memory Features:</strong> Implement memory store, recall, and clear functions</li>
+            <li><strong>Keyboard Input:</strong> Allow users to type numbers directly into a display</li>
+            <li><strong>Theme Switcher:</strong> Add dark mode and color theme options</li>
+            <li><strong>Export History:</strong> Save calculation history to a text file</li>
+            <li><strong>Currency Converter:</strong> Add currency conversion with live exchange rates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+      <h2 style="color: white; margin-bottom: 1rem;">🎊 Excellent Progress!</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+        You've mastered user input, data processing, and built a fully functional calculator application!
+      </p>
+      <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <h3 style="margin-bottom: 1rem;">✅ Skills You've Developed:</h3>
+        <ul style="text-align: left; display: inline-block;">
+          <li>Capturing and validating user input from Entry widgets</li>
+          <li>Converting between text and numeric data types</li>
+          <li>Implementing error handling with try/except blocks</li>
+          <li>Creating organized layouts with frames and grids</li>
+          <li>Building practical applications with real-world functionality</li>
+          <li>Adding professional features like history and keyboard shortcuts</li>
+        </ul>
+      </div>
+      <p style="font-size: 1.1rem; margin-top: 1.5rem;">
+        <strong>Coming Next:</strong> Session 3 will explore advanced widgets, menus, and file operations! 🚀
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function copyToEditor(editorId, codeId) {
+      const textarea = document.getElementById(editorId);
+      const codeBlock = document.getElementById(codeId);
+      if (textarea && codeBlock) {
+        const code = codeBlock.innerText.trim();
+        textarea.value = code;
+        textarea.focus();
+        textarea.select();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(code).then(() => {
+          // Visual feedback
+          const btn = event.target;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '✅ Copied!';
+          btn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+          
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          }, 2000);
+        }).catch(() => {
+          // Fallback for older browsers
+          textarea.select();
+          document.execCommand('copy');
+        });
+      }
+    }
+
+    function runOnline(editorId) {
+      const textarea = document.getElementById(editorId);
+      if (textarea && textarea.value.trim()) {
+        const code = textarea.value;
+        const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+        window.open(url, '_blank');
+      } else {
+        // If editor is empty, use the example code
+        const codeId = editorId.replace('editor', 'code');
+        const codeBlock = document.getElementById(codeId);
+        if (codeBlock) {
+          const code = codeBlock.innerText.trim();
+          const url = 'https://replit.com/languages/python3?code=' + encodeURIComponent(code);
+          window.open(url, '_blank');
+        }
+      }
+    }
+
+    // Auto-focus first editor when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstEditor = document.getElementById('editor1');
+      if (firstEditor) {
+        firstEditor.focus();
+      }
+    });
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
